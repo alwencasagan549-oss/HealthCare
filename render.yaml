@@ -42,5 +42,5 @@ services:
 databases:
   - name: ipihrs-chc-db
     plan: free
-    databaseName: ipihrs_chc
-    user: ipihrs_chc_user
+    databaseName: healthcare_3op3
+    user: healthcare_3op3_user
