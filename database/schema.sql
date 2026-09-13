@@ -79,6 +79,15 @@ CREATE TABLE IF NOT EXISTS patients (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
+    -- PhilPen patient demographics
+    phic_no VARCHAR(60) NULL,
+    civil_status ENUM('single','married','widowed','separated','divorced','others') NULL,
+    religion VARCHAR(120) NULL,
+    pwd_id_card_no VARCHAR(80) NULL,
+    ip_non_ip ENUM('IP','Non-IP') NULL,
+    employment_status VARCHAR(120) NULL,
+    ethnicity VARCHAR(120) NULL,
+
     INDEX idx_patients_district (district_id),
     INDEX idx_patients_status (status),
     INDEX idx_patients_code (patient_code),
@@ -193,6 +202,120 @@ CREATE TABLE IF NOT EXISTS survey_results (
         ON UPDATE CASCADE,
 
     CONSTRAINT fk_survey_results_reviewed_by
+        FOREIGN KEY (reviewed_by) REFERENCES users(user_id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- ============================================================
+-- risk_assessments
+-- ============================================================
+CREATE TABLE IF NOT EXISTS risk_assessments (
+    assessment_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT UNSIGNED NOT NULL,
+    district_id INT UNSIGNED NOT NULL,
+    conducted_by INT UNSIGNED NOT NULL,
+    assessment_date DATE NOT NULL,
+    status ENUM('pending','reviewed','flagged') NOT NULL DEFAULT 'pending',
+    reviewed_by INT UNSIGNED NULL,
+    reviewed_at DATETIME NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    -- Section II: Red Flags
+    red_flag_chest_pain TINYINT(1) NOT NULL DEFAULT 0,
+    red_flag_difficulty_breathing TINYINT(1) NOT NULL DEFAULT 0,
+    red_flag_loss_of_consciousness TINYINT(1) NOT NULL DEFAULT 0,
+    red_flag_slurred_speech TINYINT(1) NOT NULL DEFAULT 0,
+    red_flag_facial_asymmetry TINYINT(1) NOT NULL DEFAULT 0,
+    red_flag_weakness_numbness_one_side TINYINT(1) NOT NULL DEFAULT 0,
+    red_flag_disoriented TINYINT(1) NOT NULL DEFAULT 0,
+    red_flag_chest_retractions TINYINT(1) NOT NULL DEFAULT 0,
+    red_flag_seizure TINYINT(1) NOT NULL DEFAULT 0,
+    red_flag_self_harm TINYINT(1) NOT NULL DEFAULT 0,
+    red_flag_agitated TINYINT(1) NOT NULL DEFAULT 0,
+    red_flag_eye_injury TINYINT(1) NOT NULL DEFAULT 0,
+    red_flag_severe_injuries TINYINT(1) NOT NULL DEFAULT 0,
+
+    -- Section III: Past Medical History
+    pmh_hypertension TINYINT(1) NOT NULL DEFAULT 0,
+    pmh_heart_diseases TINYINT(1) NOT NULL DEFAULT 0,
+    pmh_diabetes TINYINT(1) NOT NULL DEFAULT 0,
+    pmh_cancer TINYINT(1) NOT NULL DEFAULT 0,
+    pmh_copd TINYINT(1) NOT NULL DEFAULT 0,
+    pmh_asthma TINYINT(1) NOT NULL DEFAULT 0,
+    pmh_allergies TINYINT(1) NOT NULL DEFAULT 0,
+    pmh_mental_neuro_substance_disorders TINYINT(1) NOT NULL DEFAULT 0,
+    pmh_vision_problems TINYINT(1) NOT NULL DEFAULT 0,
+    pmh_surgical_history TINYINT(1) NOT NULL DEFAULT 0,
+    pmh_thyroid TINYINT(1) NOT NULL DEFAULT 0,
+    pmh_kidney TINYINT(1) NOT NULL DEFAULT 0,
+
+    -- Section IV: Family History
+    fh_hypertension TINYINT(1) NOT NULL DEFAULT 0,
+    fh_stroke TINYINT(1) NOT NULL DEFAULT 0,
+    fh_heart_disease TINYINT(1) NOT NULL DEFAULT 0,
+    fh_diabetes TINYINT(1) NOT NULL DEFAULT 0,
+    fh_asthma TINYINT(1) NOT NULL DEFAULT 0,
+    fh_cancer TINYINT(1) NOT NULL DEFAULT 0,
+    fh_kidney_disease TINYINT(1) NOT NULL DEFAULT 0,
+    fh_premature_cvd TINYINT(1) NOT NULL DEFAULT 0,
+    fh_tb_last_5_years TINYINT(1) NOT NULL DEFAULT 0,
+    fh_mental_neuro_substance TINYINT(1) NOT NULL DEFAULT 0,
+    fh_copd TINYINT(1) NOT NULL DEFAULT 0,
+
+    -- Section V: NCD Risk Factors
+    ncd_tobacco_use TINYINT(1) NOT NULL DEFAULT 0,
+    ncd_alcohol_intake TINYINT(1) NOT NULL DEFAULT 0,
+    ncd_physical_activity TINYINT(1) NOT NULL DEFAULT 0,
+    ncd_nutrition TEXT NULL,
+    ncd_weight DECIMAL(5,2) NULL,
+    ncd_height DECIMAL(5,2) NULL,
+    ncd_bmi DECIMAL(4,2) NULL,
+    ncd_waist_circumference DECIMAL(5,2) NULL,
+    bp_first_systolic INT NULL,
+    bp_first_diastolic INT NULL,
+    bp_second_systolic INT NULL,
+    bp_second_diastolic INT NULL,
+
+    -- Section VI: Risk Screening
+    screening_blood_sugar FLOAT NULL,
+    screening_dm_symptoms TINYINT(1) NOT NULL DEFAULT 0,
+    screening_lipid_profile TEXT NULL,
+    screening_urinalysis TEXT NULL,
+    screening_chronic_respiratory_symptoms TINYINT(1) NOT NULL DEFAULT 0,
+    screening_pefr FLOAT NULL,
+
+    -- Section VII: Management
+    management_lifestyle_modification TEXT NULL,
+    management_medications TEXT NULL,
+    follow_up_date DATE NULL,
+    remarks TEXT NULL,
+    assessor_name VARCHAR(150) NULL,
+    assessor_signature VARCHAR(255) NULL,
+
+    INDEX idx_risk_assessments_district (district_id),
+    INDEX idx_risk_assessments_patient (patient_id),
+    INDEX idx_risk_assessments_conducted_by (conducted_by),
+    INDEX idx_risk_assessments_status (status),
+    INDEX idx_risk_assessments_date (assessment_date),
+
+    CONSTRAINT fk_risk_assessments_patient
+        FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_risk_assessments_district
+        FOREIGN KEY (district_id) REFERENCES districts(district_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_risk_assessments_conducted_by
+        FOREIGN KEY (conducted_by) REFERENCES users(user_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_risk_assessments_reviewed_by
         FOREIGN KEY (reviewed_by) REFERENCES users(user_id)
         ON DELETE SET NULL
         ON UPDATE CASCADE

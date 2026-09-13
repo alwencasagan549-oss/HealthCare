@@ -79,6 +79,17 @@ CREATE TABLE IF NOT EXISTS patients (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
+    -- PhilPen patient demographics
+    phic_no VARCHAR(60) NULL,
+    civil_status VARCHAR(20) NULL
+        CHECK (civil_status IN ('single','married','widowed','separated','divorced','others') OR civil_status IS NULL),
+    religion VARCHAR(120) NULL,
+    pwd_id_card_no VARCHAR(80) NULL,
+    ip_non_ip VARCHAR(10) NULL
+        CHECK (ip_non_ip IN ('IP','Non-IP') OR ip_non_ip IS NULL),
+    employment_status VARCHAR(120) NULL,
+    ethnicity VARCHAR(120) NULL,
+
     CONSTRAINT fk_patients_district
         FOREIGN KEY (district_id) REFERENCES districts(district_id)
         ON DELETE RESTRICT
@@ -197,6 +208,121 @@ CREATE INDEX IF NOT EXISTS idx_survey_results_survey ON survey_results(survey_id
 CREATE INDEX IF NOT EXISTS idx_survey_results_status ON survey_results(status);
 CREATE INDEX IF NOT EXISTS idx_survey_results_conducted_by ON survey_results(conducted_by);
 CREATE INDEX IF NOT EXISTS idx_survey_results_created ON survey_results(created_at);
+
+-- ============================================================
+-- risk_assessments
+-- ============================================================
+CREATE TABLE IF NOT EXISTS risk_assessments (
+    assessment_id SERIAL PRIMARY KEY,
+    patient_id INT NOT NULL,
+    district_id INT NOT NULL,
+    conducted_by INT NOT NULL,
+    assessment_date DATE NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (status IN ('pending','reviewed','flagged')),
+    reviewed_by INT NULL,
+    reviewed_at TIMESTAMP NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    -- Section II: Red Flags
+    red_flag_chest_pain BOOLEAN NOT NULL DEFAULT FALSE,
+    red_flag_difficulty_breathing BOOLEAN NOT NULL DEFAULT FALSE,
+    red_flag_loss_of_consciousness BOOLEAN NOT NULL DEFAULT FALSE,
+    red_flag_slurred_speech BOOLEAN NOT NULL DEFAULT FALSE,
+    red_flag_facial_asymmetry BOOLEAN NOT NULL DEFAULT FALSE,
+    red_flag_weakness_numbness_one_side BOOLEAN NOT NULL DEFAULT FALSE,
+    red_flag_disoriented BOOLEAN NOT NULL DEFAULT FALSE,
+    red_flag_chest_retractions BOOLEAN NOT NULL DEFAULT FALSE,
+    red_flag_seizure BOOLEAN NOT NULL DEFAULT FALSE,
+    red_flag_self_harm BOOLEAN NOT NULL DEFAULT FALSE,
+    red_flag_agitated BOOLEAN NOT NULL DEFAULT FALSE,
+    red_flag_eye_injury BOOLEAN NOT NULL DEFAULT FALSE,
+    red_flag_severe_injuries BOOLEAN NOT NULL DEFAULT FALSE,
+
+    -- Section III: Past Medical History
+    pmh_hypertension BOOLEAN NOT NULL DEFAULT FALSE,
+    pmh_heart_diseases BOOLEAN NOT NULL DEFAULT FALSE,
+    pmh_diabetes BOOLEAN NOT NULL DEFAULT FALSE,
+    pmh_cancer BOOLEAN NOT NULL DEFAULT FALSE,
+    pmh_copd BOOLEAN NOT NULL DEFAULT FALSE,
+    pmh_asthma BOOLEAN NOT NULL DEFAULT FALSE,
+    pmh_allergies BOOLEAN NOT NULL DEFAULT FALSE,
+    pmh_mental_neuro_substance_disorders BOOLEAN NOT NULL DEFAULT FALSE,
+    pmh_vision_problems BOOLEAN NOT NULL DEFAULT FALSE,
+    pmh_surgical_history BOOLEAN NOT NULL DEFAULT FALSE,
+    pmh_thyroid BOOLEAN NOT NULL DEFAULT FALSE,
+    pmh_kidney BOOLEAN NOT NULL DEFAULT FALSE,
+
+    -- Section IV: Family History
+    fh_hypertension BOOLEAN NOT NULL DEFAULT FALSE,
+    fh_stroke BOOLEAN NOT NULL DEFAULT FALSE,
+    fh_heart_disease BOOLEAN NOT NULL DEFAULT FALSE,
+    fh_diabetes BOOLEAN NOT NULL DEFAULT FALSE,
+    fh_asthma BOOLEAN NOT NULL DEFAULT FALSE,
+    fh_cancer BOOLEAN NOT NULL DEFAULT FALSE,
+    fh_kidney_disease BOOLEAN NOT NULL DEFAULT FALSE,
+    fh_premature_cvd BOOLEAN NOT NULL DEFAULT FALSE,
+    fh_tb_last_5_years BOOLEAN NOT NULL DEFAULT FALSE,
+    fh_mental_neuro_substance BOOLEAN NOT NULL DEFAULT FALSE,
+    fh_copd BOOLEAN NOT NULL DEFAULT FALSE,
+
+    -- Section V: NCD Risk Factors
+    ncd_tobacco_use BOOLEAN NOT NULL DEFAULT FALSE,
+    ncd_alcohol_intake BOOLEAN NOT NULL DEFAULT FALSE,
+    ncd_physical_activity BOOLEAN NOT NULL DEFAULT FALSE,
+    ncd_nutrition TEXT NULL,
+    ncd_weight NUMERIC(5,2) NULL,
+    ncd_height NUMERIC(5,2) NULL,
+    ncd_bmi NUMERIC(4,2) NULL,
+    ncd_waist_circumference NUMERIC(5,2) NULL,
+    bp_first_systolic INT NULL,
+    bp_first_diastolic INT NULL,
+    bp_second_systolic INT NULL,
+    bp_second_diastolic INT NULL,
+
+    -- Section VI: Risk Screening
+    screening_blood_sugar NUMERIC NULL,
+    screening_dm_symptoms BOOLEAN NOT NULL DEFAULT FALSE,
+    screening_lipid_profile TEXT NULL,
+    screening_urinalysis TEXT NULL,
+    screening_chronic_respiratory_symptoms BOOLEAN NOT NULL DEFAULT FALSE,
+    screening_pefr NUMERIC NULL,
+
+    -- Section VII: Management
+    management_lifestyle_modification TEXT NULL,
+    management_medications TEXT NULL,
+    follow_up_date DATE NULL,
+    remarks TEXT NULL,
+    assessor_name VARCHAR(150) NULL,
+    assessor_signature VARCHAR(255) NULL,
+
+    CONSTRAINT fk_risk_assessments_patient
+        FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_risk_assessments_district
+        FOREIGN KEY (district_id) REFERENCES districts(district_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_risk_assessments_conducted_by
+        FOREIGN KEY (conducted_by) REFERENCES users(user_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_risk_assessments_reviewed_by
+        FOREIGN KEY (reviewed_by) REFERENCES users(user_id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_risk_assessments_district ON risk_assessments(district_id);
+CREATE INDEX IF NOT EXISTS idx_risk_assessments_patient ON risk_assessments(patient_id);
+CREATE INDEX IF NOT EXISTS idx_risk_assessments_conducted_by ON risk_assessments(conducted_by);
+CREATE INDEX IF NOT EXISTS idx_risk_assessments_status ON risk_assessments(status);
+CREATE INDEX IF NOT EXISTS idx_risk_assessments_date ON risk_assessments(assessment_date);
 
 -- ============================================================
 -- audit_logs
