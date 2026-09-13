@@ -33,9 +33,35 @@ $stmt = $pdo->query("
 $districts = $stmt->fetchAll();
 
 $pageTitle = 'Districts';
+$districtQueryError = null;
+
+try {
+    // List districts with counts
+    $stmt = $pdo->query("
+        SELECT d.district_id, d.district_name, d.district_code, d.address, d.contact_number,
+               d.email, d.status, d.created_at,
+               COUNT(DISTINCT p.patient_id) AS patient_count,
+               COUNT(DISTINCT u.user_id) AS nurse_count,
+               COUNT(DISTINCT dp.user_id) AS dpwh_count
+        FROM districts d
+        LEFT JOIN patients p ON p.district_id = d.district_id AND p.status = 'active'
+        LEFT JOIN users u ON u.district_id = d.district_id AND u.role = 'nurse' AND u.status = 'active'
+        LEFT JOIN users dp ON dp.district_id = d.district_id AND dp.role = 'dpwh' AND dp.status = 'active'
+        GROUP BY d.district_id
+        ORDER BY d.district_name
+    ");
+    $districts = $stmt->fetchAll();
+} catch (Throwable $e) {
+    $districtQueryError = $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+    $districts = [];
+    error_log('Districts query error: ' . $districtQueryError);
+}
 ?>
 
 <div class="main-content">
+    <?php if ($districtQueryError): ?>
+        <div class="alert alert-danger">Districts list failed: <?= e($districtQueryError) ?></div>
+    <?php endif; ?>
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
         <div>
             <h2 class="mb-0">Districts</h2>
