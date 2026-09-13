@@ -5,7 +5,6 @@
 /.env.*.local
 /.claude
 *.log
-*.sql
 *.sqlite
 .htaccess
 composer.lock
