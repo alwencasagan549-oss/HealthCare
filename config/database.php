@@ -40,7 +40,7 @@ class Database
                 } else {
                     self::$settings = [
                         'host'     => self::env('DB_HOST', 'localhost') ?? 'localhost',
-                        'port'     => isset(self::env('DB_PORT')) ? (int)self::env('DB_PORT') : 3306,
+                        'port'     => (int) (self::env('DB_PORT') ?: 3306),
                         'dbname'   => self::env('DB_NAME', 'ipihrs_chc') ?? 'ipihrs_chc',
                         'username' => self::env('DB_USER', 'root') ?? 'root',
                         'password' => self::env('DB_PASSWORD', '') ?? '',
