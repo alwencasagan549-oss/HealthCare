@@ -44,7 +44,6 @@ try {
         LEFT JOIN patients p ON p.district_id = d.district_id AND p.status = 'active'
         LEFT JOIN users u ON u.district_id = d.district_id AND u.role = 'nurse' AND u.status = 'active'
         LEFT JOIN users dp ON dp.district_id = d.district_id AND dp.role = 'dpwh' AND dp.status = 'active'
-        WHERE d.status = 'active'
         GROUP BY d.district_id
         ORDER BY d.district_name
     ");
