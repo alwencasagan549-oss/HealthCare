@@ -30,16 +30,48 @@ $pageScripts = [];
 $dashboardQueryError = null;
 
 try {
-    // City-wide stats
     $totalDistricts   = (int)$pdo->query("SELECT COUNT(*) FROM districts WHERE status = 'active'")->fetchColumn();
-    $totalNurses      = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'nurse' AND status = 'active'")->fetchColumn();
-    $totalPatients    = (int)$pdo->query("SELECT COUNT(*) FROM patients WHERE status = 'active'")->fetchColumn();
-    $totalSurveys     = (int)$pdo->query("SELECT COUNT(*) FROM surveys WHERE is_active = TRUE")->fetchColumn();
-    $totalDpwh        = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'dpwh' AND status = 'active'")->fetchColumn();
-    $pendingReviews   = (int)$pdo->query("SELECT COUNT(*) FROM risk_assessments WHERE status = 'pending'")->fetchColumn();
-    $totalAssessments = (int)$pdo->query("SELECT COUNT(*) FROM risk_assessments")->fetchColumn();
+} catch (Throwable $e) {
+    error_log('Dashboard stat error (totalDistricts): ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+}
 
-    // District breakdown
+try {
+    $totalNurses      = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'nurse' AND status = 'active'")->fetchColumn();
+} catch (Throwable $e) {
+    error_log('Dashboard stat error (totalNurses): ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+}
+
+try {
+    $totalPatients    = (int)$pdo->query("SELECT COUNT(*) FROM patients WHERE status = 'active'")->fetchColumn();
+} catch (Throwable $e) {
+    error_log('Dashboard stat error (totalPatients): ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+}
+
+try {
+    $totalSurveys     = (int)$pdo->query("SELECT COUNT(*) FROM surveys WHERE is_active = TRUE")->fetchColumn();
+} catch (Throwable $e) {
+    error_log('Dashboard stat error (totalSurveys): ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+}
+
+try {
+    $totalDpwh        = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'dpwh' AND status = 'active'")->fetchColumn();
+} catch (Throwable $e) {
+    error_log('Dashboard stat error (totalDpwh): ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+}
+
+try {
+    $pendingReviews   = (int)$pdo->query("SELECT COUNT(*) FROM risk_assessments WHERE status = 'pending'")->fetchColumn();
+} catch (Throwable $e) {
+    error_log('Dashboard stat error (pendingReviews): ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+}
+
+try {
+    $totalAssessments = (int)$pdo->query("SELECT COUNT(*) FROM risk_assessments")->fetchColumn();
+} catch (Throwable $e) {
+    error_log('Dashboard stat error (totalAssessments): ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+}
+
+try {
     $stmt = $pdo->query("
         SELECT d.district_id, d.district_name, d.district_code,
                COUNT(DISTINCT p.patient_id) AS patient_count,
@@ -55,7 +87,7 @@ try {
     $districts = $stmt->fetchAll();
 } catch (Throwable $e) {
     $dashboardQueryError = $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
-    error_log('Dashboard query error: ' . $dashboardQueryError);
+    error_log('Dashboard district breakdown error: ' . $dashboardQueryError);
 }
 ?>
 
@@ -63,8 +95,6 @@ try {
     <?php if ($dashboardQueryError): ?>
         <div class="alert alert-danger">Dashboard query failed: <?= e($dashboardQueryError) ?></div>
     <?php endif; ?>
-
-<div class="main-content">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
         <div>
             <h2 class="dashboard-section-title">Dashboard</h2>
