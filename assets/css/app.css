@@ -566,7 +566,7 @@ body {
 .landing-hero {
     background: var(--color-blue-50);
     color: var(--color-foreground);
-    padding: var(--space-16) var(--space-5) var(--space-14);
+    padding: var(--space-20) var(--space-5) var(--space-16);
     text-align: center;
 }
 
