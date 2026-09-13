@@ -161,7 +161,7 @@ body {
 }
 
 .navbar-logo {
-    height: 28px;
+    height: 38px;
     width: auto;
     object-fit: contain;
     background: transparent;
@@ -584,8 +584,8 @@ body {
 }
 
 .landing-hero .brand-logo {
-    width: 96px;
-    height: 96px;
+    width: 128px;
+    height: 128px;
     object-fit: contain;
     display: block;
 }
@@ -651,8 +651,8 @@ body {
     }
 
     .landing-hero .brand-logo {
-        width: 112px;
-        height: 112px;
+        width: 152px;
+        height: 152px;
     }
 
     .landing-hero .hero-title {
