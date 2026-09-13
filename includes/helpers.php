@@ -192,7 +192,7 @@ if (!function_exists('is_logged_in')) {
             return false;
         }
 
-        if (!empty($_SESSION['logged_in_at']) && (time() - (int)$_SESSION['logged_in_at']) > SESSION_TIMEOUT) {
+        if (!empty($_SESSION['last_activity']) && (time() - (int)$_SESSION['last_activity']) > SESSION_TIMEOUT) {
             return false;
         }
 

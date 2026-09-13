@@ -18,9 +18,24 @@ if (is_logged_in()) {
     redirect($dashboard);
 }
 
-// Touch session activity so expired-session loops do not keep extending lifetime.
+// Expire the timed-out session before showing the expired page.
 if (session_status() === PHP_SESSION_ACTIVE) {
-    $_SESSION['last_activity'] = time();
+    $_SESSION = [];
+
+    if (ini_get('session.use_cookies')) {
+        $params = session_get_cookie_params();
+        setcookie(
+            session_name(),
+            '',
+            time() - 42000,
+            $params['path'],
+            $params['domain'],
+            $params['secure'],
+            $params['httponly']
+        );
+    }
+
+    session_destroy();
 }
 ?>
 <!DOCTYPE html>
