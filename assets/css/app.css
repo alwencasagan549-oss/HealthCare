@@ -566,7 +566,7 @@ body {
 .landing-hero {
     background: var(--color-blue-50);
     color: var(--color-foreground);
-    padding: var(--space-12) var(--space-5) var(--space-10);
+    padding: var(--space-10) var(--space-5) var(--space-8);
     text-align: center;
     position: relative;
 }
@@ -593,13 +593,13 @@ body {
     font-weight: 800;
     font-size: var(--font-size-2xl);
     color: var(--color-foreground);
-    margin-top: 0.25rem;
-    margin-bottom: var(--space-2);
+    margin-top: 0.2rem;
+    margin-bottom: var(--space-1);
 }
 
 .landing-hero .brand-logo {
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
     object-fit: contain;
     display: block;
     margin: 0 auto;
@@ -609,8 +609,8 @@ body {
     color: var(--color-muted-foreground);
     max-width: 720px;
     margin: 0 auto;
-    line-height: 1.5;
-    font-size: var(--font-size-base);
+    line-height: 1.35;
+    font-size: var(--font-size-sm);
     font-weight: 400;
     padding: 0 var(--space-4);
 }
@@ -618,7 +618,7 @@ body {
 .landing-login-area {
     max-width: 1100px;
     margin: 0 auto;
-    padding: var(--space-8) var(--space-5) var(--space-10);
+    padding: var(--space-6) var(--space-5) var(--space-8);
 }
 
 .landing-login-card {
@@ -632,15 +632,15 @@ body {
 }
 
 .landing-login-header {
-    padding: var(--space-4) var(--space-5) 0;
+    padding: var(--space-3) var(--space-5) 0;
     text-align: center;
 }
 
 .landing-login-header h2 {
     font-weight: 700;
-    margin-bottom: var(--space-1);
+    margin-bottom: 0.1rem;
     color: var(--color-foreground);
-    font-size: 1.25rem;
+    font-size: 1.15rem;
 }
 
 .landing-login-header p {
@@ -650,39 +650,39 @@ body {
 }
 
 .landing-login-body {
-    padding: var(--space-4) var(--space-5) var(--space-5);
+    padding: var(--space-3) var(--space-5) var(--space-4);
 }
 
 .landing-footer {
     text-align: center;
     color: var(--color-muted-foreground);
     font-size: var(--font-size-sm);
-    padding: var(--space-4) var(--space-4) var(--space-6);
+    padding: var(--space-3) var(--space-4) var(--space-5);
     background: var(--color-slate-50);
     border-top: 1px solid var(--color-border);
 }
 
 @media (min-width: 768px) {
     .landing-hero {
-        padding: var(--space-16) var(--space-8) var(--space-12);
+        padding: var(--space-14) var(--space-8) var(--space-10);
     }
 
     .landing-hero .brand-logo {
-        width: 140px;
-        height: 140px;
+        width: 170px;
+        height: 170px;
     }
 
     .landing-hero .hero-title {
-        font-size: 2.25rem;
-        margin-top: 0.5rem;
+        font-size: 2rem;
+        margin-top: 0.3rem;
     }
 
     .landing-hero .hero-subtitle {
-        font-size: 1.05rem;
+        font-size: var(--font-size-base);
     }
 
     .landing-login-area {
-        padding: var(--space-10) var(--space-8) var(--space-12);
+        padding: var(--space-8) var(--space-8) var(--space-10);
     }
 
     .landing-login-card {
