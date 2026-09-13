@@ -7,25 +7,104 @@
     --primary: #0284c7;
     --primary-dark: #026aa7;
 
-    /* Design-system tokens */
-    --color-primary: #0891b2;
-    --color-primary-dark: #0e7490;
-    --color-secondary: #22d3ee;
-    --color-accent: #059669;
-    --color-background: #ecfeff;
-    --color-foreground: #164e63;
-    --color-card: #ffffff;
-    --color-card-foreground: #164e63;
-    --color-muted: #e8f1f6;
-    --color-muted-foreground: #475569;
-    --color-border: #a5f3fc;
-    --color-ring: #0891b2;
-    --color-danger: #dc2626;
-    --color-danger-foreground: #ffffff;
+    /* Primitives */
+    --color-cyan-600: #0891b2;
+    --color-cyan-700: #0e7490;
+    --color-cyan-900: #164e63;
+    --color-cyan-50: #ecfeff;
+    --color-cyan-100: #cffafe;
+    --color-cyan-200: #a5f3fc;
+    --color-cyan-400: #22d3ee;
+    --color-emerald-600: #059669;
+    --color-emerald-700: #047857;
+    --color-slate-50: #f8fafc;
+    --color-slate-100: #f1f5f9;
+    --color-slate-200: #e2e8f0;
+    --color-slate-300: #cbd5e1;
+    --color-slate-400: #94a3b8;
+    --color-slate-500: #64748b;
+    --color-slate-600: #475569;
+    --color-slate-900: #0f172a;
+    --color-white: #ffffff;
+    --color-red-600: #dc2626;
+
+    /* Semantic */
+    --color-primary: var(--color-cyan-600);
+    --color-primary-dark: var(--color-cyan-700);
+    --color-primary-deeper: var(--color-cyan-900);
+    --color-secondary: var(--color-cyan-400);
+    --color-accent: var(--color-emerald-600);
+    --color-accent-hover: var(--color-emerald-700);
+    --color-background: var(--color-cyan-50);
+    --color-foreground: var(--color-cyan-900);
+    --color-card: var(--color-white);
+    --color-card-foreground: var(--color-cyan-900);
+    --color-muted: var(--color-cyan-100);
+    --color-muted-foreground: var(--color-slate-500);
+    --color-border: var(--color-cyan-200);
+    --color-ring: var(--color-cyan-600);
+    --color-danger: var(--color-red-600);
+    --color-danger-foreground: var(--color-white);
+    --color-input-bg: var(--color-slate-50);
+    --color-input-border: var(--color-slate-300);
+    --color-input-text: var(--color-slate-900);
+    --color-input-placeholder: var(--color-slate-400);
+    --color-focus-ring: rgba(8, 145, 178, 0.22);
+    --color-tab-bg: var(--color-slate-50);
+    --color-tab-text: var(--color-slate-600);
+    --color-tab-hover-text: var(--color-slate-900);
+
+    /* Component */
+    --button-bg: var(--color-primary);
+    --button-fg: var(--color-white);
+    --button-hover-bg: var(--color-primary-dark);
+    --button-padding-x: var(--space-4);
+    --button-padding-y: var(--space-2);
+    --button-radius: 0.5rem;
+    --input-bg: var(--color-input-bg);
+    --input-border: var(--color-input-border);
+    --input-focus-ring: var(--color-focus-ring);
+    --input-padding: 0.65rem 0.75rem;
+    --card-bg: var(--color-card);
+    --card-border: var(--color-border);
+    --card-padding: var(--space-5);
+    --card-radius: 1.1rem;
+    --card-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 6px 24px rgba(8, 145, 178, 0.06);
+    --tab-bg: var(--color-tab-bg);
+    --tab-text: var(--color-tab-text);
+    --tab-active-bg: var(--color-primary);
+    --tab-active-text: var(--color-white);
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.5rem;
+    --font-size-2xl: 1.875rem;
+
+    --radius-sm: 0.5rem;
+    --radius-default: 0.75rem;
+    --radius-lg: 1.1rem;
+    --radius-xl: 1.25rem;
 
     --shadow-soft: 0 10px 40px rgba(8, 145, 178, 0.08);
-    --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 6px 24px rgba(8, 145, 178, 0.06);
-    --radius: 1.25rem;
+    --shadow-card: var(--card-shadow);
+    --shadow-focus: 0 0 0 3px var(--color-focus-ring);
+
+    --duration-fast: 150ms;
+    --duration-normal: 200ms;
+    --duration-slow: 280ms;
+    --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 * {
@@ -47,7 +126,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 3rem 1.25rem;
+    padding: var(--space-12) var(--space-5);
     background:
         radial-gradient(circle at top left, rgba(8, 145, 178, 0.12), transparent 28rem),
         radial-gradient(circle at bottom right, rgba(34, 211, 238, 0.10), transparent 26rem),
@@ -56,27 +135,27 @@ body {
 
 .auth-brand {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-8);
 }
 
 .auth-brand-mark {
-    width: 56px;
-    height: 56px;
-    border-radius: 1rem;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-lg);
     background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-    color: #fff;
+    color: var(--color-white);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 1.75rem;
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-4);
     box-shadow: var(--shadow-soft);
 }
 
 .auth-brand-title {
     font-weight: 700;
     letter-spacing: -0.02em;
-    margin-bottom: 0.25rem;
+    margin-bottom: var(--space-1);
 }
 
 .auth-brand-subtitle {
@@ -89,14 +168,14 @@ body {
     max-width: 420px;
     background: var(--color-card);
     border: 1px solid var(--color-border);
-    border-radius: 1.1rem;
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
     overflow: hidden;
 }
 
 @media (min-width: 768px) {
     .auth-page {
-        padding: 4rem 2rem;
+        padding: var(--space-12) var(--space-8);
     }
 
     .auth-card {
@@ -105,11 +184,11 @@ body {
     }
 
     .auth-header {
-        padding: 2rem 2.25rem 0;
+        padding: var(--space-8) var(--space-6) 0;
     }
 
     .auth-body {
-        padding: 1.75rem 2.25rem 2.25rem;
+        padding: var(--space-7) var(--space-6) var(--space-7);
     }
 }
 
@@ -118,12 +197,12 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.35rem;
-    font-size: 0.85rem;
+    font-size: var(--font-size-sm);
     font-weight: 500;
     color: var(--color-muted-foreground);
     text-decoration: none;
-    margin-bottom: 0.75rem;
-    transition: color 150ms ease;
+    margin-bottom: var(--space-3);
+    transition: color var(--duration-fast) var(--ease);
 }
 
 .auth-back:hover {
@@ -133,7 +212,7 @@ body {
 
 .auth-header-title {
     font-weight: 700;
-    margin-bottom: 0.25rem;
+    margin-bottom: var(--space-1);
 }
 
 .auth-header-subtitle {
@@ -147,45 +226,61 @@ body {
 }
 
 .auth-input-group .input-group-text {
-    background: #f8fafc;
-    border-color: #cbd5e1;
-    color: #475569;
+    background: var(--color-input-bg);
+    border-color: var(--color-input-border);
+    color: var(--color-muted-foreground);
 }
 
 .auth-input-group .form-control {
-    border-color: #cbd5e1;
+    border-color: var(--color-input-border);
     color: var(--color-foreground);
-    padding: 0.65rem 0.75rem;
+    padding: var(--input-padding);
+    background-color: var(--color-card);
+}
+
+.auth-input-group .form-control::placeholder {
+    color: var(--color-input-placeholder);
 }
 
 .auth-input-group .form-control:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 0.2rem rgba(2, 132, 199, 0.15);
+    box-shadow: var(--shadow-focus);
     color: var(--color-foreground);
 }
 
 .form-text {
     color: var(--color-muted-foreground);
+    font-size: var(--font-size-sm);
 }
 
 .auth-submit {
     font-weight: 600;
     padding: 0.75rem;
-    border-radius: 0.5rem;
-    transition: background 200ms ease, border-color 200ms ease, transform 150ms ease, box-shadow 200ms ease;
+    border-radius: var(--button-radius);
+    background: var(--button-bg);
+    color: var(--button-fg);
+    border: none;
+    transition: background var(--duration-normal) var(--ease), transform var(--duration-fast) var(--ease), box-shadow var(--duration-normal) var(--ease);
 }
 
 .auth-submit:hover {
+    background: var(--button-hover-bg);
     transform: translateY(-1px);
     box-shadow: 0 6px 18px rgba(8, 145, 178, 0.18);
 }
 
 .auth-submit:active {
     transform: translateY(0);
+    box-shadow: none;
+}
+
+.auth-submit:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
 }
 
 .auth-alert {
-    border-radius: 0.5rem;
+    border-radius: var(--radius-sm);
 }
 
 .auth-alert ul {
@@ -195,56 +290,56 @@ body {
 .auth-footer {
     text-align: center;
     color: var(--color-muted-foreground);
-    font-size: 0.9rem;
-    margin-top: 1.25rem;
+    font-size: var(--font-size-sm);
+    margin-top: var(--space-5);
 }
 
-/* Tabbed role login */
 .role-tabs {
     display: flex;
-    gap: 0.5rem;
-    padding: 0.75rem 1.75rem 0;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4) 0;
     border-bottom: 1px solid var(--color-border);
-    background: #f8fafc;
+    background: var(--tab-bg);
 }
 
 .role-tab {
     flex: 1 1 0;
-    padding: 0.65rem 0.5rem;
+    padding: var(--space-2) var(--space-2);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: var(--font-size-sm);
     text-align: center;
     border: none;
     border-bottom: 3px solid transparent;
     background: transparent;
-    color: #475569;
+    color: var(--tab-text);
     cursor: pointer;
-    transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    transition: color var(--duration-fast) var(--ease), border-color var(--duration-fast) var(--ease), background var(--duration-fast) var(--ease);
 }
 
 .role-tab:hover {
-    color: #0f172a;
+    color: var(--color-tab-hover-text);
     background: rgba(255, 255, 255, 0.6);
 }
 
 .role-tab[aria-selected="true"] {
-    color: #ffffff;
-    background: var(--color-primary);
+    color: var(--tab-active-text);
+    background: var(--tab-active-bg);
     border-bottom-color: var(--color-primary-dark);
 }
 
 .role-tab:focus-visible {
     outline: none;
-    box-shadow: inset 0 0 0 2px var(--color-primary);
+    box-shadow: inset 0 0 0 2px var(--color-ring);
 }
 
 .role-tab ~ .auth-body {
-    padding-top: 1.25rem;
+    padding-top: var(--space-5);
 }
 
 /* Landing page */
 .hero {
-    padding: 4rem 1.25rem 3.5rem;
+    padding: var(--space-12) var(--space-5) var(--space-10);
 }
 
 .hero-inner {
@@ -256,14 +351,14 @@ body {
 .brand-mark {
     width: 64px;
     height: 64px;
-    border-radius: 1.1rem;
+    border-radius: var(--radius-lg);
     background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-    color: #fff;
+    color: var(--color-white);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 2rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: var(--space-5);
     box-shadow: var(--shadow-soft);
 }
 
@@ -283,18 +378,18 @@ body {
 .role-grid {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 1.25rem 5rem;
+    padding: 0 var(--space-5) var(--space-12);
 }
 
 .role-card {
     background: var(--color-card);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    padding: 1.75rem;
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
     box-shadow: var(--shadow-card);
     height: 100%;
     text-align: left;
-    transition: transform 180ms ease, box-shadow 180ms ease;
+    transition: transform var(--duration-normal) var(--ease), box-shadow var(--duration-normal) var(--ease);
 }
 
 .role-card:hover {
@@ -305,27 +400,27 @@ body {
 .role-icon {
     width: 3rem;
     height: 3rem;
-    border-radius: 0.85rem;
+    border-radius: var(--radius-default);
     background: var(--color-muted);
     color: var(--color-primary);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 1.35rem;
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-4);
 }
 
 .role-card h2 {
-    font-size: 1.15rem;
+    font-size: var(--font-size-lg);
     font-weight: 700;
-    margin-bottom: 0.35rem;
+    margin-bottom: var(--space-1);
 }
 
 .role-card p {
     color: var(--color-muted-foreground);
-    font-size: 0.95rem;
+    font-size: var(--font-size-base);
     line-height: 1.55;
-    margin-bottom: 1.25rem;
+    margin-bottom: var(--space-5);
 }
 
 .btn-role {
@@ -334,13 +429,13 @@ body {
     justify-content: center;
     gap: 0.45rem;
     width: 100%;
-    padding: 0.75rem 1rem;
+    padding: var(--space-3) var(--space-4);
     font-weight: 600;
-    border-radius: 0.75rem;
+    border-radius: var(--radius-default);
     border: none;
     cursor: pointer;
     text-decoration: none;
-    transition: background 180ms ease, transform 120ms ease;
+    transition: background var(--duration-normal) var(--ease), transform var(--duration-fast) var(--ease);
 }
 
 .btn-role:active {
@@ -349,45 +444,45 @@ body {
 
 .btn-role-primary {
     background: var(--color-primary);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .btn-role-primary:hover {
     background: var(--color-primary-dark);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .btn-role-accent {
     background: var(--color-accent);
-    color: #fff;
+    color: var(--color-white);
 }
 
 .btn-role-accent:hover {
-    background: #047857;
-    color: #fff;
+    background: var(--color-accent-hover);
+    color: var(--color-white);
 }
 
 .btn-role-secondary {
-    background: #0e7490;
-    color: #fff;
+    background: var(--color-primary-dark);
+    color: var(--color-white);
 }
 
 .btn-role-secondary:hover {
-    background: #155e75;
-    color: #fff;
+    background: var(--color-primary-deeper);
+    color: var(--color-white);
 }
 
 .site-footer {
     text-align: center;
     color: var(--color-muted-foreground);
-    font-size: 0.9rem;
-    padding: 1.5rem 1rem 2.5rem;
+    font-size: var(--font-size-sm);
+    padding: var(--space-4) var(--space-4) var(--space-8);
 }
 
 .section-divider {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 1.25rem;
+    padding: 0 var(--space-5);
 }
 
 .section-divider hr {
@@ -408,8 +503,8 @@ body {
     width: 260px;
     overflow-y: auto;
     background-color: #212529;
-    color: #fff;
-    padding-top: 1rem;
+    color: var(--color-white);
+    padding-top: var(--space-4);
     z-index: 1000;
     transition: transform 0.3s ease-in-out;
 }
@@ -422,12 +517,12 @@ body {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    font-size: 0.95rem;
+    font-size: var(--font-size-base);
 }
 
 .sidebar .nav-link:hover,
 .sidebar .nav-link.active {
-    color: #fff;
+    color: var(--color-white);
     background-color: rgba(255, 255, 255, 0.08);
     text-decoration: none;
 }
@@ -438,23 +533,23 @@ body {
 }
 
 .sidebar .nav-section {
-    padding: 0.5rem 1rem;
-    font-size: 0.75rem;
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--font-size-xs);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: #6c757d;
-    margin-top: 0.75rem;
+    margin-top: var(--space-3);
 }
 
 .main-content {
     margin-left: 260px;
-    padding: 1.5rem;
+    padding: var(--space-6);
     min-height: calc(100vh - 56px);
 }
 
 .card-stat {
     border: none;
-    border-radius: 0.5rem;
+    border-radius: var(--radius-sm);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
@@ -467,7 +562,7 @@ body {
 .card-stat .icon {
     width: 3rem;
     height: 3rem;
-    border-radius: 0.5rem;
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -512,12 +607,12 @@ body {
     .auth-body,
     .change-password-header,
     .change-password-body {
-        padding-left: 1.25rem;
-        padding-right: 1.25rem;
+        padding-left: var(--space-4);
+        padding-right: var(--space-4);
     }
 
     .role-tabs {
-        padding-left: 1.25rem;
-        padding-right: 1.25rem;
+        padding-left: var(--space-4);
+        padding-right: var(--space-4);
     }
 }

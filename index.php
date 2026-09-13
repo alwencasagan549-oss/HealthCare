@@ -99,9 +99,9 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
         <section class="role-grid" aria-label="Login">
             <div class="auth-card">
                 <div class="role-tabs" role="tablist" aria-label="Login role">
-                    <a class="role-tab" type="button" role="tab" href="?role=admin" aria-selected="<?= $activeRole === 'admin' ? 'true' : 'false' ?>">Admin</a>
-                    <a class="role-tab" type="button" role="tab" href="?role=nurse" aria-selected="<?= $activeRole === 'nurse' ? 'true' : 'false' ?>">Nurse</a>
-                    <a class="role-tab" type="button" role="tab" href="?role=dpwh" aria-selected="<?= $activeRole === 'dpwh' ? 'true' : 'false' ?>">DPWH</a>
+                    <button class="role-tab" type="button" role="tab" data-role="admin" aria-selected="<?= $activeRole === 'admin' ? 'true' : 'false' ?>">Admin</button>
+                    <button class="role-tab" type="button" role="tab" data-role="nurse" aria-selected="<?= $activeRole === 'nurse' ? 'true' : 'false' ?>">Nurse</button>
+                    <button class="role-tab" type="button" role="tab" data-role="dpwh" aria-selected="<?= $activeRole === 'dpwh' ? 'true' : 'false' ?>">DPWH</button>
                 </div>
 
                 <div class="auth-body">
@@ -112,7 +112,7 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
                         </div>
                     <?php endif; ?>
 
-                    <form method="POST" action="index.php?role=<?= e($activeRole) ?>" novalidate class="auth-form">
+                    <form method="POST" action="index.php?role=<?= e($activeRole) ?>" novalidate class="auth-form" id="login-form-panel" role="tabpanel" aria-labelledby="tab-<?= e($activeRole) ?>">
                         <?= csrf_field() ?>
                         <input type="hidden" name="role" value="<?= e($activeRole) ?>">
 
@@ -183,8 +183,9 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
                 tab.addEventListener('click', () => {
                     tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
                     tab.setAttribute('aria-selected', 'true');
-                    roleInput.value = tab.dataset.role || new URL(tab.href).searchParams.get('role') || 'admin';
+                    roleInput.value = tab.dataset.role || 'admin';
                     form.setAttribute('aria-labelledby', tab.id);
+                    form.querySelector('input[type="text"]')?.focus();
                 });
             });
         })();
