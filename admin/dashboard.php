@@ -24,6 +24,11 @@ $pendingReviews = 0;
 $totalAssessments = 0;
 $districts = [];
 
+$pageTitle = 'Dashboard';
+$pageStyles = [];
+$pageScripts = [];
+$dashboardQueryError = null;
+
 try {
     // City-wide stats
     $totalDistricts   = (int)$pdo->query("SELECT COUNT(*) FROM districts WHERE status = 'active'")->fetchColumn();
@@ -52,11 +57,6 @@ try {
     $dashboardQueryError = $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
     error_log('Dashboard query error: ' . $dashboardQueryError);
 }
-
-$pageTitle = 'Dashboard';
-$pageStyles = [];
-$pageScripts = [];
-$dashboardQueryError = null;
 ?>
 
 <div class="main-content">
