@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $stmt = $pdo->prepare("
                 INSERT INTO users (username, password_hash, email, full_name, contact_number, role, district_id, status, force_password_change, created_by)
-                VALUES (:username, :password_hash, :email, :full_name, :contact_number, 'nurse', :district_id, 'active', 0, :created_by)
+                VALUES (:username, :password_hash, :email, :full_name, :contact_number, 'nurse', :district_id, 'active', FALSE, :created_by)
             ");
 
             try {

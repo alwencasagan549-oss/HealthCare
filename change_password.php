@@ -59,12 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $auth->updatePassword($userId, $newHash);
 
             // Clear force password change flag
-            $stmt = $pdo->prepare("UPDATE users SET force_password_change = 0 WHERE user_id = :user_id");
+            $stmt = $pdo->prepare("UPDATE users SET force_password_change = FALSE WHERE user_id = :user_id");
             $stmt->execute([':user_id' => $userId]);
 
             unset($_SESSION['force_password_change']);
 
-            $audit->log('UPDATE', 'users', (string)$userId, null, ['force_password_change' => 0], $userId);
+            $audit->log('UPDATE', 'users', (string)$userId, null, ['force_password_change' => FALSE], $userId);
 
             $success = 'Password changed successfully. Redirecting...';
 
