@@ -196,6 +196,8 @@ if (!function_exists('is_logged_in')) {
             return false;
         }
 
+        $_SESSION['last_activity'] = time();
+
         return true;
     }
 }

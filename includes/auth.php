@@ -54,6 +54,7 @@ class Auth
         $_SESSION['role']         = $user['role'];
         $_SESSION['district_id']  = $user['district_id'];
         $_SESSION['logged_in_at'] = time();
+        $_SESSION['last_activity'] = time();
 
         if ($user['force_password_change']) {
             $_SESSION['force_password_change'] = true;

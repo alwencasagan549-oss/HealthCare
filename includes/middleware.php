@@ -24,7 +24,7 @@ class Middleware
     public static function authenticated(): void
     {
         if (!is_logged_in()) {
-            redirect(url('index.php?expired=1'));
+            redirect(url('session_expired.php'));
         }
     }
 
