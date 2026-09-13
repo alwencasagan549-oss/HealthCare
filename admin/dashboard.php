@@ -61,8 +61,8 @@ $pageScripts = [];
 <div class="main-content">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
         <div>
-            <h2 class="mb-0">Dashboard</h2>
-            <p class="text-muted mb-0">City-wide health management overview</p>
+            <h2 class="dashboard-section-title">Dashboard</h2>
+            <p class="dashboard-section-subtitle">City-wide health management overview</p>
         </div>
         <span class="text-muted small">
             <i class="bi bi-calendar3 me-1"></i><?= e(date('F j, Y')) ?>
@@ -76,7 +76,7 @@ $pageScripts = [];
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 small text-uppercase fw-semibold">Districts</p>
-                            <h3 class="mb-0 fw-bold"><?= e((string)$totalDistricts) ?></h3>
+                            <h3 class="mb-0 dashboard-stat-value"><?= e((string)$totalDistricts) ?></h3>
                         </div>
                         <div class="icon bg-primary bg-opacity-10 text-primary">
                             <i class="bi bi-geo-alt"></i>
@@ -91,7 +91,7 @@ $pageScripts = [];
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 small text-uppercase fw-semibold">Nurses</p>
-                            <h3 class="mb-0 fw-bold"><?= e((string)$totalNurses) ?></h3>
+                            <h3 class="mb-0 dashboard-stat-value"><?= e((string)$totalNurses) ?></h3>
                         </div>
                         <div class="icon bg-success bg-opacity-10 text-success">
                             <i class="bi bi-person-vcard"></i>
@@ -106,7 +106,7 @@ $pageScripts = [];
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 small text-uppercase fw-semibold">Patients</p>
-                            <h3 class="mb-0 fw-bold"><?= e((string)$totalPatients) ?></h3>
+                            <h3 class="mb-0 dashboard-stat-value"><?= e((string)$totalPatients) ?></h3>
                         </div>
                         <div class="icon bg-info bg-opacity-10 text-info">
                             <i class="bi bi-people"></i>
@@ -121,7 +121,7 @@ $pageScripts = [];
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 small text-uppercase fw-semibold">Pending Reviews</p>
-                            <h3 class="mb-0 fw-bold"><?= e((string)$pendingReviews) ?></h3>
+                            <h3 class="mb-0 dashboard-stat-value"><?= e((string)$pendingReviews) ?></h3>
                         </div>
                         <div class="icon bg-warning bg-opacity-10 text-warning">
                             <i class="bi bi-clipboard-data"></i>
@@ -134,14 +134,14 @@ $pageScripts = [];
 
     <div class="row g-3">
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0 py-3">
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
                     <h5 class="mb-0">District Overview</h5>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
+                        <table class="table dashboard-table table-hover align-middle mb-0">
+                            <thead>
                                 <tr>
                                     <th>District</th>
                                     <th>Code</th>
@@ -152,7 +152,7 @@ $pageScripts = [];
                             </thead>
                             <tbody>
                                 <?php if (!$districts): ?>
-                                    <tr><td colspan="5" class="text-center text-muted py-4">No districts found.</td></tr>
+                                    <tr><td colspan="5" class="dashboard-empty">No districts found.</td></tr>
                                 <?php else: ?>
                                     <?php foreach ($districts as $d): ?>
                                         <tr>
@@ -172,11 +172,11 @@ $pageScripts = [];
         </div>
 
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0 py-3">
+            <div class="dashboard-card mb-3">
+                <div class="dashboard-card-header">
                     <h5 class="mb-0">Quick Stats</h5>
                 </div>
-                <div class="card-body">
+                <div class="dashboard-card-body">
                     <div class="d-flex justify-content-between py-2 border-bottom">
                         <span class="text-muted">Total Assessments</span>
                         <span class="fw-semibold"><?= e((string)$totalAssessments) ?></span>

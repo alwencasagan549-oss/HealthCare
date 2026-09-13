@@ -50,8 +50,8 @@ require_once __DIR__ . '/../includes/sidebar.php';
 <div class="main-content">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
         <div>
-            <h2 class="mb-0">Dashboard</h2>
-            <p class="text-muted mb-0"><?= e($district['district_name'] ?? '') ?> overview</p>
+            <h2 class="dashboard-section-title">Dashboard</h2>
+            <p class="dashboard-section-subtitle"><?= e($district['district_name'] ?? '') ?> overview</p>
         </div>
         <span class="text-muted small">
             <i class="bi bi-calendar3 me-1"></i><?= e(date('F j, Y')) ?>
@@ -65,7 +65,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 small text-uppercase fw-semibold">Patients</p>
-                            <h3 class="mb-0 fw-bold"><?= e((string)$patientCount) ?></h3>
+                            <h3 class="mb-0 dashboard-stat-value"><?= e((string)$patientCount) ?></h3>
                         </div>
                         <div class="icon bg-info bg-opacity-10 text-info"><i class="bi bi-people"></i></div>
                     </div>
@@ -78,7 +78,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 small text-uppercase fw-semibold">Assessments</p>
-                            <h3 class="mb-0 fw-bold"><?= e((string)$assessmentCount) ?></h3>
+                            <h3 class="mb-0 dashboard-stat-value"><?= e((string)$assessmentCount) ?></h3>
                         </div>
                         <div class="icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-clipboard-data"></i></div>
                     </div>
@@ -91,7 +91,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 small text-uppercase fw-semibold">Pending Reviews</p>
-                            <h3 class="mb-0 fw-bold"><?= e((string)$pendingReviews) ?></h3>
+                            <h3 class="mb-0 dashboard-stat-value"><?= e((string)$pendingReviews) ?></h3>
                         </div>
                         <div class="icon bg-warning bg-opacity-10 text-warning"><i class="bi bi-hourglass-split"></i></div>
                     </div>
@@ -104,7 +104,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 small text-uppercase fw-semibold">Flagged</p>
-                            <h3 class="mb-0 fw-bold text-danger"><?= e((string)$flaggedCount) ?></h3>
+                            <h3 class="mb-0 dashboard-stat-value text-danger"><?= e((string)$flaggedCount) ?></h3>
                         </div>
                         <div class="icon bg-danger bg-opacity-10 text-danger"><i class="bi bi-flag"></i></div>
                     </div>
@@ -115,15 +115,14 @@ require_once __DIR__ . '/../includes/sidebar.php';
 
     <div class="row g-3">
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
                     <h5 class="mb-0">Recent Assessments</h5>
-                    <a href="<?= e(url('nurse/survey_results.php')) ?>" class="btn btn-sm btn-primary">View All</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
+                        <table class="table dashboard-table table-hover align-middle mb-0">
+                            <thead>
                                 <tr>
                                     <th>Patient</th>
                                     <th>Conducted By</th>
@@ -133,7 +132,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                             </thead>
                             <tbody>
                                 <?php if (!$results): ?>
-                                    <tr><td colspan="4" class="text-center text-muted py-4">No assessments found.</td></tr>
+                                    <tr><td colspan="4" class="dashboard-empty">No assessments found.</td></tr>
                                 <?php else: ?>
                                     <?php foreach ($results as $r): ?>
                                         <tr>
@@ -156,39 +155,39 @@ require_once __DIR__ . '/../includes/sidebar.php';
         </div>
 
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm mb-3">
-                <div class="card-header bg-white border-0 py-3">
+            <div class="dashboard-card mb-3">
+                <div class="dashboard-card-header">
                     <h5 class="mb-0">District Info</h5>
                 </div>
-                <div class="card-body">
-                    <div class="mb-2">
-                        <div class="small text-muted">Name</div>
-                        <div class="fw-semibold"><?= e($district['district_name'] ?? '') ?></div>
+                <div class="dashboard-card-body">
+                    <div class="dashboard-list-item">
+                        <span class="dashboard-meta">Name</span>
+                        <span class="fw-semibold"><?= e($district['district_name'] ?? '') ?></span>
                     </div>
-                    <div class="mb-2">
-                        <div class="small text-muted">Code</div>
-                        <div><?= e($district['district_code'] ?? '') ?></div>
+                    <div class="dashboard-list-item">
+                        <span class="dashboard-meta">Code</span>
+                        <span><?= e($district['district_code'] ?? '') ?></span>
                     </div>
-                    <div class="mb-2">
-                        <div class="small text-muted">DPWH Accounts</div>
-                        <div><?= e((string)$dpwhCount) ?></div>
+                    <div class="dashboard-list-item">
+                        <span class="dashboard-meta">DPWH Accounts</span>
+                        <span><?= e((string)$dpwhCount) ?></span>
                     </div>
                 </div>
             </div>
 
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0 py-3">
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
                     <h5 class="mb-0">Quick Actions</h5>
                 </div>
-                <div class="card-body d-grid gap-2">
-                    <a href="<?= e(url('nurse/patients.php')) ?>" class="btn btn-outline-primary text-start">
-                        <i class="bi bi-people me-2"></i> Manage Patients
+                <div class="dashboard-card-body d-grid gap-2">
+                    <a href="<?= e(url('nurse/patients.php')) ?>" class="dashboard-quick-action">
+                        <i class="bi bi-people"></i> Manage Patients
                     </a>
-                    <a href="<?= e(url('nurse/survey_results.php')) ?>" class="btn btn-outline-warning text-start">
-                        <i class="bi bi-clipboard-data me-2"></i> Review Assessments
+                    <a href="<?= e(url('nurse/survey_results.php')) ?>" class="dashboard-quick-action">
+                        <i class="bi bi-clipboard-data"></i> Review Assessments
                     </a>
-                    <a href="<?= e(url('nurse/dpwh_accounts.php')) ?>" class="btn btn-outline-success text-start">
-                        <i class="bi bi-person-gear me-2"></i> DPWH Accounts
+                    <a href="<?= e(url('nurse/dpwh_accounts.php')) ?>" class="dashboard-quick-action">
+                        <i class="bi bi-person-gear"></i> DPWH Accounts
                     </a>
                 </div>
             </div>

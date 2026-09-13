@@ -6,8 +6,8 @@ declare(strict_types=1);
 // ============================================================
 
 // Application
-define('APP_NAME', 'Integrated Patient Information and Health Report System for City Health Center');
-define('APP_SHORT_NAME', 'IPIHRS-CHC');
+define('APP_NAME', 'Integrated Networked System for Patient Information and Record Entry');
+define('APP_SHORT_NAME', 'INSPIRE');
 $appUrl = rtrim((string)($_ENV['APP_URL'] ?? $_SERVER['APP_URL'] ?? getenv('APP_URL') ?: 'http://localhost/Health-Report-Sytem'), '/');
 define('APP_URL', $appUrl);
 define('APP_VERSION', '1.0.0');

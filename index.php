@@ -87,7 +87,7 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
                 <div class="col-sm-10 col-md-8 col-lg-5 col-xl-4">
                     <div class="auth-header">
                         <div class="brand-mark mx-auto" aria-hidden="true">
-                            <i class="bi bi-heart-pulse"></i>
+                            <img src="<?= e(asset_path('assets/logo/Logo.jpg')) ?>" alt="<?= e(APP_SHORT_NAME) ?> logo" class="brand-logo">
                         </div>
                         <h1 class="auth-header-title h3"><?= e(APP_SHORT_NAME) ?></h1>
                         <p class="auth-header-subtitle">City Health Center health reporting</p>
@@ -140,6 +140,13 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
                                                required
                                                autocomplete="current-password"
                                                aria-describedby="password-help">
+                                        <button class="btn btn-outline-secondary auth-password-toggle"
+                                                type="button"
+                                                aria-label="Show password"
+                                                data-target="password"
+                                                tabindex="-1">
+                                            <i class="bi bi-eye" aria-hidden="true"></i>
+                                        </button>
                                     </div>
                                     <div id="password-help" class="form-text">Enter your current password.</div>
                                 </div>
@@ -188,6 +195,24 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
                     roleInput.value = tab.dataset.role || 'admin';
                     form.setAttribute('aria-labelledby', tab.id);
                     form.querySelector('input[type="text"]')?.focus();
+                });
+            });
+
+            document.querySelectorAll('.auth-password-toggle').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const input = document.getElementById(btn.dataset.target);
+                    const icon = btn.querySelector('i');
+                    if (!input || !icon) return;
+
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.replace('bi-eye', 'bi-eye-slash');
+                        btn.setAttribute('aria-label', 'Hide password');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.replace('bi-eye-slash', 'bi-eye');
+                        btn.setAttribute('aria-label', 'Show password');
+                    }
                 });
             });
         })();

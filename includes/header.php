@@ -52,7 +52,7 @@ if (empty($_SESSION['csrf_token'])) {
             <i class="bi bi-list"></i>
         </button>
         <a class="navbar-brand" href="<?= e(asset_path('admin/dashboard.php')) ?>">
-            <i class="bi bi-heart-pulse me-2"></i>
+            <img src="<?= e(asset_path('assets/logo/Logo.jpg')) ?>" alt="<?= e(APP_SHORT_NAME) ?> logo" class="navbar-logo me-2">
             <?= e(APP_SHORT_NAME) ?>
         </a>
         <div class="ms-auto d-flex align-items-center gap-3 text-light small">

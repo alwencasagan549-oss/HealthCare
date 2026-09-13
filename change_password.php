@@ -123,25 +123,45 @@ $pageTitle = 'Change Password';
 
                     <div class="mb-3">
                         <label for="current_password" class="form-label">Current Password</label>
-                        <input type="password"
-                               class="form-control"
-                               id="current_password"
-                               name="current_password"
-                               required
-                               autocomplete="current-password"
-                               aria-describedby="current-password-help">
+                        <div class="input-group auth-input-group">
+                            <span class="input-group-text" aria-hidden="true"><i class="bi bi-lock"></i></span>
+                            <input type="password"
+                                   class="form-control"
+                                   id="current_password"
+                                   name="current_password"
+                                   required
+                                   autocomplete="current-password"
+                                   aria-describedby="current-password-help">
+                            <button class="btn btn-outline-secondary auth-password-toggle"
+                                    type="button"
+                                    aria-label="Show password"
+                                    data-target="current_password"
+                                    tabindex="-1">
+                                <i class="bi bi-eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
                         <div id="current-password-help" class="form-text">Enter your existing password.</div>
                     </div>
 
                     <div class="mb-3">
                         <label for="new_password" class="form-label">New Password</label>
-                        <input type="password"
-                               class="form-control"
-                               id="new_password"
-                               name="new_password"
-                               required
-                               autocomplete="new-password"
-                               aria-describedby="new-password-help">
+                        <div class="input-group auth-input-group">
+                            <span class="input-group-text" aria-hidden="true"><i class="bi bi-lock"></i></span>
+                            <input type="password"
+                                   class="form-control"
+                                   id="new_password"
+                                   name="new_password"
+                                   required
+                                   autocomplete="new-password"
+                                   aria-describedby="new-password-help">
+                            <button class="btn btn-outline-secondary auth-password-toggle"
+                                    type="button"
+                                    aria-label="Show password"
+                                    data-target="new_password"
+                                    tabindex="-1">
+                                <i class="bi bi-eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
                         <div id="new-password-help" class="form-text">
                             Use at least 8 characters, including uppercase, lowercase, number, and special character.
                         </div>
@@ -149,13 +169,23 @@ $pageTitle = 'Change Password';
 
                     <div class="mb-4">
                         <label for="confirm_password" class="form-label">Confirm New Password</label>
-                        <input type="password"
-                               class="form-control"
-                               id="confirm_password"
-                               name="confirm_password"
-                               required
-                               autocomplete="new-password"
-                               aria-describedby="confirm-password-help">
+                        <div class="input-group auth-input-group">
+                            <span class="input-group-text" aria-hidden="true"><i class="bi bi-lock"></i></span>
+                            <input type="password"
+                                   class="form-control"
+                                   id="confirm_password"
+                                   name="confirm_password"
+                                   required
+                                   autocomplete="new-password"
+                                   aria-describedby="confirm-password-help">
+                            <button class="btn btn-outline-secondary auth-password-toggle"
+                                    type="button"
+                                    aria-label="Show password"
+                                    data-target="confirm_password"
+                                    tabindex="-1">
+                                <i class="bi bi-eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
                         <div id="confirm-password-help" class="form-text">Reenter your new password.</div>
                     </div>
 
@@ -172,5 +202,26 @@ $pageTitle = 'Change Password';
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (function () {
+            document.querySelectorAll('.auth-password-toggle').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const input = document.getElementById(btn.dataset.target);
+                    const icon = btn.querySelector('i');
+                    if (!input || !icon) return;
+
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.replace('bi-eye', 'bi-eye-slash');
+                        btn.setAttribute('aria-label', 'Hide password');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.replace('bi-eye-slash', 'bi-eye');
+                        btn.setAttribute('aria-label', 'Show password');
+                    }
+                });
+            });
+        })();
+    </script>
 </body>
 </html>

@@ -69,8 +69,8 @@ require_once __DIR__ . '/../includes/sidebar.php';
 <div class="main-content">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
         <div>
-            <h2 class="mb-0">Dashboard</h2>
-            <p class="text-muted mb-0">Welcome, <?= e($_SESSION['full_name'] ?? '') ?></p>
+            <h2 class="dashboard-section-title">Dashboard</h2>
+            <p class="dashboard-section-subtitle">Welcome, <?= e($_SESSION['full_name'] ?? '') ?></p>
         </div>
         <span class="text-muted small">
             <i class="bi bi-calendar3 me-1"></i><?= e(date('F j, Y')) ?>
@@ -84,7 +84,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 small text-uppercase fw-semibold">My Assessments</p>
-                            <h3 class="mb-0 fw-bold"><?= e((string)$mySurveys) ?></h3>
+                            <h3 class="mb-0 dashboard-stat-value"><?= e((string)$mySurveys) ?></h3>
                         </div>
                         <div class="icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-journal-check"></i></div>
                     </div>
@@ -97,7 +97,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 small text-uppercase fw-semibold">Pending</p>
-                            <h3 class="mb-0 fw-bold"><?= e((string)$pendingMine) ?></h3>
+                            <h3 class="mb-0 dashboard-stat-value"><?= e((string)$pendingMine) ?></h3>
                         </div>
                         <div class="icon bg-warning bg-opacity-10 text-warning"><i class="bi bi-hourglass-split"></i></div>
                     </div>
@@ -110,7 +110,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 small text-uppercase fw-semibold">Reviewed</p>
-                            <h3 class="mb-0 fw-bold"><?= e((string)$reviewedMine) ?></h3>
+                            <h3 class="mb-0 dashboard-stat-value"><?= e((string)$reviewedMine) ?></h3>
                         </div>
                         <div class="icon bg-success bg-opacity-10 text-success"><i class="bi bi-check-circle"></i></div>
                     </div>
@@ -123,7 +123,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 small text-uppercase fw-semibold">Flagged</p>
-                            <h3 class="mb-0 fw-bold text-danger"><?= e((string)$flaggedMine) ?></h3>
+                            <h3 class="mb-0 dashboard-stat-value text-danger"><?= e((string)$flaggedMine) ?></h3>
                         </div>
                         <div class="icon bg-danger bg-opacity-10 text-danger"><i class="bi bi-flag"></i></div>
                     </div>
@@ -134,29 +134,29 @@ require_once __DIR__ . '/../includes/sidebar.php';
 
     <div class="row g-3">
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm mb-3">
-                <div class="card-header bg-white border-0 py-3">
+            <div class="dashboard-card mb-3">
+                <div class="dashboard-card-header">
                     <h5 class="mb-0">District</h5>
                 </div>
-                <div class="card-body">
-                    <div class="mb-2">
-                        <div class="small text-muted">Name</div>
-                        <div class="fw-semibold"><?= e($district['district_name'] ?? '') ?></div>
+                <div class="dashboard-card-body">
+                    <div class="dashboard-list-item">
+                        <span class="dashboard-meta">Name</span>
+                        <span class="fw-semibold"><?= e($district['district_name'] ?? '') ?></span>
                     </div>
-                    <div class="mb-2">
-                        <div class="small text-muted">Code</div>
-                        <div><?= e($district['district_code'] ?? '') ?></div>
+                    <div class="dashboard-list-item">
+                        <span class="dashboard-meta">Code</span>
+                        <span><?= e($district['district_code'] ?? '') ?></span>
                     </div>
                 </div>
             </div>
 
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0 py-3">
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
                     <h5 class="mb-0">Available Assessments</h5>
                 </div>
-                <div class="card-body">
+                <div class="dashboard-card-body">
                     <?php if (!$surveys): ?>
-                        <p class="text-muted mb-0 small">No active assessment forms available.</p>
+                        <p class="dashboard-empty">No active assessment forms available.</p>
                     <?php else: ?>
                         <ul class="list-group list-group-flush">
                             <?php foreach ($surveys as $s): ?>
@@ -172,17 +172,19 @@ require_once __DIR__ . '/../includes/sidebar.php';
         </div>
 
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">My Recent Assessments</h5>
-                    <a href="<?= e(url('dpwh/surveys_new.php')) ?>" class="btn btn-primary btn-sm">
-                        <i class="bi bi-plus-circle me-1"></i> New Assessment
-                    </a>
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">My Recent Assessments</h5>
+                        <a href="<?= e(url('dpwh/surveys_new.php')) ?>" class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-circle me-1"></i> New Assessment
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light">
+                        <table class="table dashboard-table table-hover align-middle mb-0">
+                            <thead>
                                 <tr>
                                     <th>Patient</th>
                                     <th>Status</th>
@@ -191,7 +193,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                             </thead>
                             <tbody>
                                 <?php if (!$recent): ?>
-                                    <tr><td colspan="3" class="text-center text-muted py-4">No assessments submitted yet.</td></tr>
+                                    <tr><td colspan="3" class="dashboard-empty">No assessments submitted yet.</td></tr>
                                 <?php else: ?>
                                     <?php foreach ($recent as $r): ?>
                                         <tr>
