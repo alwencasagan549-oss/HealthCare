@@ -1,0 +1,12 @@
+{
+    "name": "health-report-system/ipihrs-chc",
+    "description": "Integrated Patient Information and Health Report System for City Health Center",
+    "type": "project",
+    "require": {
+        "php": ">=8.0"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}
