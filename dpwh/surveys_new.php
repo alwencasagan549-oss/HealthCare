@@ -9,6 +9,7 @@ require_once __DIR__ . '/../includes/middleware.php';
 require_once __DIR__ . '/../includes/audit.php';
 
 Middleware::dpwh();
+Middleware::dpwhFirstLogin();
 
 $pageTitle = 'New Risk Assessment';
 require_once __DIR__ . '/../includes/header.php';

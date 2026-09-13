@@ -47,7 +47,7 @@ function nav_item(string $url, string $label, string $icon, array $paths = []): 
 
         <div class="nav-section">Reports</div>
         <?= nav_item(url('admin/reports.php'), 'Reports', 'bar-chart', ['admin/reports']) ?>
-        <?= nav_item(url('admin/audit_logs.php'), 'Audit Logs', 'journal-text', ['admin/audit_logs']) ?>
+        <?= nav_item(url('admin/account_settings.php'), 'Account Settings', 'gear', ['admin/account_settings']) ?>
 
     <?php elseif ($role === 'nurse'): ?>
         <div class="nav-section">Main</div>

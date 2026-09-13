@@ -22,11 +22,6 @@ $userId = (int)($_SESSION['user_id'] ?? 0);
 $errors = [];
 $success = '';
 
-// Enforce DPWH first login
-if (is_dpwh() && empty($_SESSION['force_password_change'])) {
-    redirect(url('dpwh/dashboard.php'));
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $currentPassword = (string)($_POST['current_password'] ?? '');
     $newPassword = (string)($_POST['new_password'] ?? '');
@@ -66,6 +61,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $audit->log('UPDATE', 'users', (string)$userId, null, ['force_password_change' => FALSE], $userId);
 
+            $role = $_SESSION['role'] ?? '';
+            $dashboard = match ($role) {
+                'admin'  => url('admin/dashboard.php'),
+                'nurse'  => url('nurse/dashboard.php'),
+                'dpwh'   => url('dpwh/dashboard.php'),
+                default  => url('index.php'),
+            };
+
             $success = 'Password changed successfully. Redirecting...';
 
             echo '<div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
@@ -77,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                   </div>';
 
-            echo '<script>setTimeout(function(){ window.location.href = ' . json_encode(url('dpwh/dashboard.php')) . '; }, 1500);</script>';
+            echo '<script>setTimeout(function(){ window.location.href = ' . json_encode($dashboard) . '; }, 1500);</script>';
         }
     }
 }
@@ -103,7 +106,7 @@ $pageTitle = 'Change Password';
                     <i class="bi bi-shield-lock"></i>
                 </div>
                 <h1 class="h4 fw-bold mt-2 mb-1">Change Your Password</h1>
-                <p class="text-muted mb-0">You must change your password before continuing.</p>
+                <p class="text-muted mb-0">Update your password to keep your account secure.</p>
             </div>
 
             <div class="auth-body">

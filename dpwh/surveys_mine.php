@@ -9,6 +9,7 @@ require_once __DIR__ . '/../includes/middleware.php';
 require_once __DIR__ . '/../includes/audit.php';
 
 Middleware::dpwh();
+Middleware::dpwhFirstLogin();
 
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/sidebar.php';
