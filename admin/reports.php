@@ -83,7 +83,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                         <tr>
                             <th>District</th>
                             <th class="text-center">Patients</th>
-                            <th class="text-center">Surveys</th>
+                            <th class="text-center">Assessments</th>
                             <th class="text-center">Pending</th>
                             <th class="text-center">Reviewed</th>
                             <th class="text-center">Flagged</th>
@@ -97,7 +97,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                                 <tr>
                                     <td class="fw-semibold"><?= e($row['district_name']) ?></td>
                                     <td class="text-center"><?= e((string)$row['patients']) ?></td>
-                                    <td class="text-center"><?= e((string)$row['surveys']) ?></td>
+                                    <td class="text-center"><?= e((string)$row['assessments']) ?></td>
                                     <td class="text-center"><?= e((string)$row['pending']) ?></td>
                                     <td class="text-center"><?= e((string)$row['reviewed']) ?></td>
                                     <td class="text-center"><?= e((string)$row['flagged']) ?></td>

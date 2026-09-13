@@ -112,7 +112,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <p class="text-muted mb-1 small text-uppercase fw-semibold">Surveys</p>
+                            <p class="text-muted mb-1 small text-uppercase fw-semibold">Assessments</p>
                             <h3 class="mb-0 fw-bold"><?= e((string)$surveyCount) ?></h3>
                         </div>
                         <div class="icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-clipboard-data"></i></div>
@@ -203,7 +203,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Recent Survey Results</h5>
+                    <h5 class="mb-0">Recent Assessments</h5>
                     <span class="badge bg-light text-dark border">Last 10</span>
                 </div>
                 <div class="card-body p-0">
@@ -211,7 +211,6 @@ require_once __DIR__ . '/../includes/sidebar.php';
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Survey</th>
                                     <th>Patient</th>
                                     <th>Conducted By</th>
                                     <th>Status</th>
@@ -220,19 +219,18 @@ require_once __DIR__ . '/../includes/sidebar.php';
                             </thead>
                             <tbody>
                                 <?php if (!$results): ?>
-                                    <tr><td colspan="5" class="text-center text-muted py-4">No survey results yet.</td></tr>
+                                    <tr><td colspan="4" class="text-center text-muted py-4">No assessments yet.</td></tr>
                                 <?php else: ?>
                                     <?php foreach ($results as $r): ?>
                                         <tr>
-                                            <td><?= e($r['survey_name']) ?></td>
-                                            <td><?= e($r['patient_name']) ?></td>
+                                            <td class="fw-semibold"><?= e($r['patient_name']) ?></td>
                                             <td class="small"><?= e($r['conducted_by']) ?></td>
                                             <td>
                                                 <span class="badge bg-<?= $r['status'] === 'pending' ? 'warning' : ($r['status'] === 'reviewed' ? 'success' : 'danger') ?>">
                                                     <?= e(ucfirst($r['status'])) ?>
                                                 </span>
                                             </td>
-                                            <td class="small text-muted"><?= e(format_datetime($r['created_at'])) ?></td>
+                                            <td class="small text-muted"><?= e(format_date($r['assessment_date'])) ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
