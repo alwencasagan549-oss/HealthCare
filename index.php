@@ -81,104 +81,103 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
     <link href="<?= e(asset_path('assets/css/app.css')) ?>" rel="stylesheet">
 </head>
 <body>
-    <div class="auth-page">
-        <div class="container">
-            <div class="row justify-content-center align-items-center min-vh-100">
-                <div class="col-sm-10 col-md-8 col-lg-5 col-xl-4">
-                    <div class="auth-header">
-                        <div class="brand-mark mx-auto" aria-hidden="true">
-                            <img src="<?= e(asset_path('assets/logo/Logo1.png')) ?>" alt="<?= e(APP_SHORT_NAME) ?> logo" class="brand-logo">
-                        </div>
-                        <h1 class="auth-header-title h3"><?= e(APP_SHORT_NAME) ?></h1>
-                        <p class="auth-header-subtitle">City Health Center health reporting</p>
-                    </div>
-
-                    <div class="auth-card">
-                        <div class="role-tabs" role="tablist" aria-label="Login role">
-                            <button class="role-tab" id="tab-admin" type="button" role="tab" data-role="admin" aria-selected="<?= $activeRole === 'admin' ? 'true' : 'false' ?>" aria-controls="login-form-panel">Admin</button>
-                            <button class="role-tab" id="tab-nurse" type="button" role="tab" data-role="nurse" aria-selected="<?= $activeRole === 'nurse' ? 'true' : 'false' ?>" aria-controls="login-form-panel">Nurse</button>
-                            <button class="role-tab" id="tab-dpwh" type="button" role="tab" data-role="dpwh" aria-selected="<?= $activeRole === 'dpwh' ? 'true' : 'false' ?>" aria-controls="login-form-panel">DPWH</button>
-                        </div>
-
-                        <div class="auth-body">
-                            <?php if ($error): ?>
-                                <div class="alert alert-danger auth-alert" role="alert" tabindex="-1" aria-labelledby="login-error">
-                                    <p id="login-error" class="mb-0 fw-semibold">Sign-in failed</p>
-                                    <p class="mb-0"><?= e($error) ?></p>
-                                </div>
-                            <?php endif; ?>
-
-                            <form method="POST" action="index.php?role=<?= e($activeRole) ?>" novalidate class="auth-form" id="login-form-panel" role="tabpanel" aria-labelledby="tab-<?= e($activeRole) ?>">
-                                <?= csrf_field() ?>
-                                <input type="hidden" name="role" value="<?= e($activeRole) ?>">
-
-                                <div class="mb-3">
-                                    <label for="username" class="form-label">Username</label>
-                                    <div class="input-group auth-input-group">
-                                        <span class="input-group-text" aria-hidden="true"><i class="bi bi-person"></i></span>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="username"
-                                               name="username"
-                                               value="<?= e(old('username')) ?>"
-                                               required
-                                               autofocus
-                                               autocomplete="username"
-                                               aria-describedby="username-help">
-                                    </div>
-                                    <div id="username-help" class="form-text">Enter your assigned username.</div>
-                                </div>
-
-                                <div class="mb-4">
-                                    <label for="password" class="form-label">Password</label>
-                                    <div class="input-group auth-input-group">
-                                        <span class="input-group-text" aria-hidden="true"><i class="bi bi-lock"></i></span>
-                                        <input type="password"
-                                               class="form-control"
-                                               id="password"
-                                               name="password"
-                                               required
-                                               autocomplete="current-password"
-                                               aria-describedby="password-help">
-                                        <button class="btn btn-outline-secondary auth-password-toggle"
-                                                type="button"
-                                                aria-label="Show password"
-                                                data-target="password"
-                                                tabindex="-1">
-                                            <i class="bi bi-eye" aria-hidden="true"></i>
-                                        </button>
-                                    </div>
-                                    <div id="password-help" class="form-text">Enter your current password.</div>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary w-100 auth-submit">
-                                    <i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>Sign In
-                                </button>
-                            </form>
-
-                            <div class="auth-footer">
-                                <small>
-                                    Trouble logging in? Please clear your browser cache, or use incognito mode.
-                                </small>
-                                <br>
-                                <small>
-                                    Need help? Contact your system administrator.
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-
-                    <p class="text-center text-muted mt-3 mb-0 small">
-                        Authorized use only. Contact your administrator for access.
-                    </p>
-                </div>
+    <div class="landing-hero">
+        <div class="hero-inner">
+            <div class="landing-brand-mark mx-auto" aria-hidden="true">
+                <img src="<?= e(asset_path('assets/logo/Logo1.png')) ?>" alt="<?= e(APP_SHORT_NAME) ?> logo" class="brand-logo">
             </div>
+            <h1 class="hero-title"><?= e(APP_SHORT_NAME) ?></h1>
+            <p class="hero-subtitle">Integrated Networked System for Patient Information and Record Entry — City Health Center health reporting and district management.</p>
         </div>
     </div>
 
-    <footer class="site-footer d-none">
-        <small>&copy; <?= e(date('Y')) ?> <?= e(APP_SHORT_NAME) ?>. Authorized use only.</small>
-    </footer>
+    <div class="landing-login-area">
+        <div class="landing-login-card">
+            <div class="landing-login-header">
+                <h2>Sign in to your account</h2>
+                <p>Choose your role and enter your credentials to continue.</p>
+            </div>
+
+            <div class="landing-login-body">
+                <div class="role-tabs" role="tablist" aria-label="Login role">
+                    <button class="role-tab" id="tab-admin" type="button" role="tab" data-role="admin" aria-selected="<?= $activeRole === 'admin' ? 'true' : 'false' ?>" aria-controls="login-form-panel">Admin</button>
+                    <button class="role-tab" id="tab-nurse" type="button" role="tab" data-role="nurse" aria-selected="<?= $activeRole === 'nurse' ? 'true' : 'false' ?>" aria-controls="login-form-panel">Nurse</button>
+                    <button class="role-tab" id="tab-dpwh" type="button" role="tab" data-role="dpwh" aria-selected="<?= $activeRole === 'dpwh' ? 'true' : 'false' ?>" aria-controls="login-form-panel">DPWH</button>
+                </div>
+
+                <div class="auth-body" style="padding-top: var(--space-5);">
+                    <?php if ($error): ?>
+                        <div class="alert alert-danger auth-alert" role="alert" tabindex="-1" aria-labelledby="login-error">
+                            <p id="login-error" class="mb-0 fw-semibold">Sign-in failed</p>
+                            <p class="mb-0"><?= e($error) ?></p>
+                        </div>
+                    <?php endif; ?>
+
+                    <form method="POST" action="index.php?role=<?= e($activeRole) ?>" novalidate class="auth-form" id="login-form-panel" role="tabpanel" aria-labelledby="tab-<?= e($activeRole) ?>">
+                        <?= csrf_field() ?>
+                        <input type="hidden" name="role" value="<?= e($activeRole) ?>">
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <div class="input-group auth-input-group">
+                                <span class="input-group-text" aria-hidden="true"><i class="bi bi-person"></i></span>
+                                <input type="text"
+                                       class="form-control"
+                                       id="username"
+                                       name="username"
+                                       value="<?= e(old('username')) ?>"
+                                       required
+                                       autofocus
+                                       autocomplete="username"
+                                       aria-describedby="username-help">
+                            </div>
+                            <div id="username-help" class="form-text">Enter your assigned username.</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-group auth-input-group">
+                                <span class="input-group-text" aria-hidden="true"><i class="bi bi-lock"></i></span>
+                                <input type="password"
+                                       class="form-control"
+                                       id="password"
+                                       name="password"
+                                       required
+                                       autocomplete="current-password"
+                                       aria-describedby="password-help">
+                                <button class="btn btn-outline-secondary auth-password-toggle"
+                                        type="button"
+                                        aria-label="Show password"
+                                        data-target="password"
+                                        tabindex="-1">
+                                    <i class="bi bi-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div id="password-help" class="form-text">Enter your current password.</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 auth-submit">
+                            <i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>Sign In
+                        </button>
+                    </form>
+
+                    <div class="auth-footer">
+                        <small>
+                            Trouble logging in? Please clear your browser cache, or use incognito mode.
+                        </small>
+                        <br>
+                        <small>
+                            Need help? Contact your system administrator.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="landing-footer">
+            <small>&copy; <?= e(date('Y')) ?> <?= e(APP_SHORT_NAME) ?>. Authorized use only. Contact your administrator for access.</small>
+        </footer>
+    </div>
 
     <script>
         (function () {
