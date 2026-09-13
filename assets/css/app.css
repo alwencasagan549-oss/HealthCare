@@ -724,36 +724,34 @@ body {
 
 /* Dashboard enhancements */
 .dashboard-section-title {
-    font-weight: 700;
-    letter-spacing: -0.01em;
+    font-weight: 800;
+    color: var(--color-foreground);
+    letter-spacing: -0.02em;
     margin-bottom: var(--space-1);
 }
 
 .dashboard-section-subtitle {
     color: var(--color-muted-foreground);
-    margin-bottom: 0;
-}
-
-.dashboard-section-title {
-    font-weight: 800;
-    color: var(--color-foreground);
-    letter-spacing: -0.01em;
+    margin-bottom: var(--space-3);
+    font-weight: 500;
 }
 
 .dashboard-card {
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-default);
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 6px 24px rgba(37, 99, 235, 0.08);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 28px rgba(37, 99, 235, 0.07);
     background: var(--color-card);
     transition: box-shadow var(--duration-normal) var(--ease), transform var(--duration-fast) var(--ease);
+    overflow: hidden;
 }
 
 .dashboard-card:hover {
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.10), 0 0 0 1px rgba(37, 99, 235, 0.10);
+    box-shadow: 0 12px 36px rgba(15, 23, 42, 0.10), 0 0 0 1px rgba(37, 99, 235, 0.12);
+    transform: translateY(-1px);
 }
 
 .dashboard-card-header {
-    background: var(--color-card);
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.04), rgba(37, 99, 235, 0.00));
     border-bottom: 1px solid var(--color-border);
     padding: var(--space-4) var(--space-5);
 }
@@ -779,9 +777,10 @@ body {
     color: var(--color-white);
     font-size: var(--font-size-sm);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     padding: var(--space-3) var(--space-4);
     border-bottom: none;
+    white-space: nowrap;
 }
 
 .dashboard-table td {
@@ -789,7 +788,19 @@ body {
     vertical-align: middle;
 }
 
+.dashboard-table tbody tr {
+    transition: background var(--duration-fast) var(--ease);
+}
+
 .dashboard-table tbody tr:hover {
+    background: var(--color-slate-50);
+}
+
+.dashboard-table tbody tr:nth-child(even) {
+    background: rgba(37, 99, 235, 0.02);
+}
+
+.dashboard-table tbody tr:nth-child(even):hover {
     background: var(--color-slate-50);
 }
 
@@ -824,6 +835,45 @@ body {
     font-weight: 700;
 }
 
+.dashboard-table .badge {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 0.35em 0.65em;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+}
+
+.dashboard-stat-value {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.dashboard-card-body .d-flex.justify-content-between {
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border);
+    font-weight: 500;
+    color: var(--color-foreground);
+}
+
+.dashboard-card-body .d-flex.justify-content-between:last-child {
+    border-bottom: none;
+}
+
+.dashboard-card-body .d-flex.justify-content-between .text-muted {
+    font-weight: 500;
+    color: var(--color-muted-foreground);
+}
+
+.dashboard-card-body .d-flex.justify-content-between .fw-semibold {
+    font-weight: 700;
+    color: var(--color-foreground);
+}
+
+.dashboard-card-body .d-flex.justify-content-between .text-warning {
+    color: var(--color-warning, #b45309);
+    font-weight: 700;
+}
+
 .dashboard-list-item {
     display: flex;
     justify-content: space-between;
@@ -850,6 +900,7 @@ body {
 .dashboard-stat-value {
     font-weight: 800;
     letter-spacing: -0.02em;
+    color: var(--color-foreground);
 }
 
 .dashboard-quick-action {
@@ -872,27 +923,51 @@ body {
     transform: translateY(-1px);
 }
 
+.dashboard-stat-value {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--color-foreground);
+}
+
 .card-stat {
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-default);
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 6px 18px rgba(37, 99, 235, 0.06);
-    transition: transform var(--duration-fast) var(--ease), box-shadow var(--duration-normal) var(--ease);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 22px rgba(37, 99, 235, 0.06);
+    transition: transform var(--duration-fast) var(--ease), box-shadow var(--duration-normal) var(--ease), border-color var(--duration-fast) var(--ease);
     background: var(--color-card);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-stat::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(37, 99, 235, 0.03), rgba(37, 99, 235, 0.00));
+    pointer-events: none;
 }
 
 .card-stat:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.10), 0 0 0 1px rgba(37, 99, 235, 0.10);
+    box-shadow: 0 12px 34px rgba(15, 23, 42, 0.10), 0 0 0 1px rgba(37, 99, 235, 0.12);
+    border-color: rgba(37, 99, 235, 0.25);
 }
 
 .card-stat .icon {
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: var(--radius-sm);
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.35rem;
+    font-size: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.card-stat .card-body {
+    position: relative;
+    z-index: 1;
 }
 
 .sidebar-overlay {
