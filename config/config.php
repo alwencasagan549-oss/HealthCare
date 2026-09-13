@@ -49,6 +49,11 @@ ini_set('session.cookie_samesite', 'Strict');
 ini_set('session.cookie_secure', $isHttps || $sessionSecure === '1' ? '1' : '0');
 ini_set('session.use_only_cookies', '1');
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_name(SESSION_NAME);
+    session_start();
+}
+
 // Error reporting
 if (APP_DEBUG) {
     error_reporting(E_ALL);

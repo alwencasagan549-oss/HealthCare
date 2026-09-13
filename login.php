@@ -12,11 +12,6 @@ require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/middleware.php';
 require_once __DIR__ . '/includes/audit.php';
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_name(SESSION_NAME);
-    session_start();
-}
-
 Middleware::guest();
 
 $pdo = Database::getConnection();
@@ -70,6 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $pageTitle = 'Login';
+
+$activeRole = 'admin';
+if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], true)) {
+    $activeRole = $_GET['role'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -93,6 +93,18 @@ $pageTitle = 'Login';
         </div>
 
         <div class="auth-card">
+            <div class="role-tabs" role="tablist" aria-label="Login role">
+                <button class="role-tab" type="button" role="tab" data-role="admin" aria-selected="<?= $activeRole === 'admin' ? 'true' : 'false' ?>" aria-controls="login-form-panel" id="tab-admin">
+                    Admin
+                </button>
+                <button class="role-tab" type="button" role="tab" data-role="nurse" aria-selected="<?= $activeRole === 'nurse' ? 'true' : 'false' ?>" aria-controls="login-form-panel" id="tab-nurse">
+                    Nurse
+                </button>
+                <button class="role-tab" type="button" role="tab" data-role="dpwh" aria-selected="<?= $activeRole === 'dpwh' ? 'true' : 'false' ?>" aria-controls="login-form-panel" id="tab-dpwh">
+                    DPWH
+                </button>
+            </div>
+
             <div class="auth-header">
                 <a class="auth-back" href="<?= e(url('index.php')) ?>">
                     <i class="bi bi-house-door" aria-hidden="true"></i>
@@ -110,8 +122,9 @@ $pageTitle = 'Login';
                     </div>
                 <?php endif; ?>
 
-                <form method="POST" action="" novalidate class="auth-form">
+                <form method="POST" action="" novalidate class="auth-form" id="login-form-panel" role="tabpanel" aria-labelledby="tab-<?= e($activeRole) ?>">
                     <?= csrf_field() ?>
+                    <input type="hidden" name="role" value="<?= e($activeRole) ?>">
 
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
@@ -152,12 +165,35 @@ $pageTitle = 'Login';
 
                 <div class="auth-footer">
                     <small>
+                        Trouble logging in? Please clear your browser cache, or use incognito mode.
+                    </small>
+                    <br>
+                    <small>
                         Need help? Contact your system administrator.
                     </small>
                 </div>
             </div>
         </div>
     </main>
+
+    <script>
+        (function () {
+            const tabs = document.querySelectorAll('.role-tab');
+            const roleInput = document.querySelector('input[name="role"]');
+            const form = document.getElementById('login-form-panel');
+
+            if (!tabs.length || !roleInput || !form) return;
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+                    tab.setAttribute('aria-selected', 'true');
+                    roleInput.value = tab.dataset.role;
+                    form.setAttribute('aria-labelledby', tab.id);
+                });
+            });
+        })();
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

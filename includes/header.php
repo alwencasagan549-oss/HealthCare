@@ -5,11 +5,6 @@ declare(strict_types=1);
 // Header Include
 // ============================================================
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_name(SESSION_NAME);
-    session_start();
-}
-
 require_once base_path('config/config.php');
 require_once INCLUDES_PATH . '/helpers.php';
 

@@ -65,7 +65,6 @@ $stmtResults->execute([':district_id' => $districtId]);
 $results = $stmtResults->fetchAll();
 
 $pageTitle = $district['district_name'];
-require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 
 <div class="main-content">

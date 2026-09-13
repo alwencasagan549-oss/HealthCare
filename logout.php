@@ -8,11 +8,6 @@ require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/middleware.php';
 require_once __DIR__ . '/includes/audit.php';
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_name(SESSION_NAME);
-    session_start();
-}
-
 Middleware::authenticated();
 
 $pdo = Database::getConnection();
