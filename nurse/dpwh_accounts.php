@@ -7,9 +7,11 @@ require_once __DIR__ . '/../includes/helpers.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/middleware.php';
 require_once __DIR__ . '/../includes/audit.php';
-require_once __DIR__ . '/../includes/header.php';
 
 Middleware::nurse();
+
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/sidebar.php';
 
 $pdo = Database::getConnection();
 $audit = new AuditLogger($pdo);

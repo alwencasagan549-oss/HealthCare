@@ -7,9 +7,11 @@ require_once __DIR__ . '/../includes/helpers.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/middleware.php';
 require_once __DIR__ . '/../includes/audit.php';
-require_once __DIR__ . '/../includes/header.php';
 
 Middleware::admin();
+
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/sidebar.php';
 
 $pdo = Database::getConnection();
 
@@ -42,23 +44,21 @@ $patientCount = (int)$pdo->prepare("SELECT COUNT(*) FROM patients WHERE district
     ->execute([':district_id' => $districtId]) ? (int)$pdo->query("SELECT COUNT(*) FROM patients WHERE district_id = {$districtId} AND status = 'active'")->fetchColumn() : 0;
 
 // Survey count
-$surveyCount = (int)$pdo->query("SELECT COUNT(*) FROM surveys WHERE district_id = {$districtId} AND is_active = TRUE")->fetchColumn();
+$surveyCount = (int)$pdo->query("SELECT COUNT(*) FROM risk_assessments WHERE district_id = {$districtId}")->fetchColumn();
 
 // DPWH count
 $dpwhCount = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE district_id = {$districtId} AND role = 'dpwh' AND status = 'active'")->fetchColumn();
 
 // Recent survey results
 $stmtResults = $pdo->prepare("
-    SELECT sr.result_id, sr.status, sr.created_at,
-           s.survey_name,
+    SELECT ra.assessment_id, ra.status, ra.created_at, ra.assessment_date,
            CONCAT(p.first_name, ' ', p.last_name) AS patient_name,
            CONCAT(u.full_name, ' (', u.username, ')') AS conducted_by
-    FROM survey_results sr
-    JOIN surveys s ON s.survey_id = sr.survey_id
-    JOIN patients p ON p.patient_id = sr.patient_id
-    JOIN users u ON u.user_id = sr.conducted_by
-    WHERE sr.district_id = :district_id
-    ORDER BY sr.created_at DESC
+    FROM risk_assessments ra
+    JOIN patients p ON p.patient_id = ra.patient_id
+    JOIN users u ON u.user_id = ra.conducted_by
+    WHERE ra.district_id = :district_id
+    ORDER BY ra.assessment_date DESC
     LIMIT 10
 ");
 $stmtResults->execute([':district_id' => $districtId]);

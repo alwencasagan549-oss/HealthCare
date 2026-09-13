@@ -7,9 +7,11 @@ require_once __DIR__ . '/../includes/helpers.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/middleware.php';
 require_once __DIR__ . '/../includes/audit.php';
-require_once __DIR__ . '/../includes/header.php';
 
 Middleware::nurse();
+
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/sidebar.php';
 
 $pdo = Database::getConnection();
 $districtId = (int)($_SESSION['district_id'] ?? 0);
@@ -18,18 +20,13 @@ $startDate = $_GET['start_date'] ?? date('Y-01-01');
 $endDate = $_GET['end_date'] ?? date('Y-m-t');
 
 $stmt = $pdo->prepare("
-    SELECT s.survey_name,
-           COUNT(DISTINCT sr.result_id) AS total_results,
-           COUNT(DISTINCT CASE WHEN sr.status = 'pending' THEN sr.result_id END) AS pending,
-           COUNT(DISTINCT CASE WHEN sr.status = 'reviewed' THEN sr.result_id END) AS reviewed,
-           COUNT(DISTINCT CASE WHEN sr.status = 'flagged' THEN sr.result_id END) AS flagged
-    FROM surveys s
-    LEFT JOIN survey_results sr ON sr.survey_id = s.survey_id
-        AND sr.district_id = :district_id
-        AND sr.created_at BETWEEN :start AND :end
-    WHERE s.is_active = TRUE
-    GROUP BY s.survey_id
-    ORDER BY s.survey_name
+    SELECT COUNT(DISTINCT ra.assessment_id) AS total_assessments,
+           COUNT(DISTINCT CASE WHEN ra.status = 'pending' THEN ra.assessment_id END) AS pending,
+           COUNT(DISTINCT CASE WHEN ra.status = 'reviewed' THEN ra.assessment_id END) AS reviewed,
+           COUNT(DISTINCT CASE WHEN ra.status = 'flagged' THEN ra.assessment_id END) AS flagged
+    FROM risk_assessments ra
+    WHERE ra.district_id = :district_id
+        AND ra.assessment_date BETWEEN :start AND :end
 ");
 $stmt->execute([
     ':district_id' => $districtId,
@@ -45,7 +42,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
 <div class="main-content">
     <div class="mb-4">
         <h2 class="mb-0">District Reports</h2>
-        <p class="text-muted mb-0">Survey summary for your district</p>
+        <p class="text-muted mb-0">Risk assessment summary for your district</p>
     </div>
 
     <div class="card border-0 shadow-sm mb-4">
@@ -78,7 +75,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Survey</th>
+                            <th>Assessment</th>
                             <th class="text-center">Total</th>
                             <th class="text-center">Pending</th>
                             <th class="text-center">Reviewed</th>
@@ -91,8 +88,8 @@ require_once __DIR__ . '/../includes/sidebar.php';
                         <?php else: ?>
                             <?php foreach ($reports as $row): ?>
                                 <tr>
-                                    <td class="fw-semibold"><?= e($row['survey_name']) ?></td>
-                                    <td class="text-center"><?= e((string)$row['total_results']) ?></td>
+                                    <td class="fw-semibold">PhilPen Risk Assessment</td>
+                                    <td class="text-center"><?= e((string)$row['total_assessments']) ?></td>
                                     <td class="text-center"><?= e((string)$row['pending']) ?></td>
                                     <td class="text-center"><?= e((string)$row['reviewed']) ?></td>
                                     <td class="text-center"><?= e((string)$row['flagged']) ?></td>

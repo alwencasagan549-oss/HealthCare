@@ -7,9 +7,11 @@ require_once __DIR__ . '/../includes/helpers.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/middleware.php';
 require_once __DIR__ . '/../includes/audit.php';
-require_once __DIR__ . '/../includes/header.php';
 
 Middleware::admin();
+
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/sidebar.php';
 
 $pdo = Database::getConnection();
 $audit = new AuditLogger($pdo);
@@ -21,14 +23,14 @@ $endDate = $_GET['end_date'] ?? date('Y-m-t');
 $stmt = $pdo->prepare("
     SELECT d.district_name,
            COUNT(DISTINCT p.patient_id) AS patients,
-           COUNT(DISTINCT sr.result_id) AS surveys,
-           COUNT(DISTINCT CASE WHEN sr.status = 'pending' THEN sr.result_id END) AS pending,
-           COUNT(DISTINCT CASE WHEN sr.status = 'reviewed' THEN sr.result_id END) AS reviewed,
-           COUNT(DISTINCT CASE WHEN sr.status = 'flagged' THEN sr.result_id END) AS flagged
+           COUNT(DISTINCT ra.assessment_id) AS assessments,
+           COUNT(DISTINCT CASE WHEN ra.status = 'pending' THEN ra.assessment_id END) AS pending,
+           COUNT(DISTINCT CASE WHEN ra.status = 'reviewed' THEN ra.assessment_id END) AS reviewed,
+           COUNT(DISTINCT CASE WHEN ra.status = 'flagged' THEN ra.assessment_id END) AS flagged
     FROM districts d
     LEFT JOIN patients p ON p.district_id = d.district_id AND p.status = 'active'
-    LEFT JOIN survey_results sr ON sr.district_id = d.district_id
-        AND sr.created_at BETWEEN :start AND :end
+    LEFT JOIN risk_assessments ra ON ra.district_id = d.district_id
+        AND ra.assessment_date BETWEEN :start AND :end
     WHERE d.status = 'active'
     GROUP BY d.district_id
     ORDER BY d.district_name

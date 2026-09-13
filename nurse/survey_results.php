@@ -7,9 +7,11 @@ require_once __DIR__ . '/../includes/helpers.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/middleware.php';
 require_once __DIR__ . '/../includes/audit.php';
-require_once __DIR__ . '/../includes/header.php';
 
 Middleware::nurse();
+
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/sidebar.php';
 
 $pdo = Database::getConnection();
 $districtId = (int)($_SESSION['district_id'] ?? 0);
@@ -17,32 +19,30 @@ $districtId = (int)($_SESSION['district_id'] ?? 0);
 $status = $_GET['status'] ?? '';
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 
-$where = ['sr.district_id = :district_id'];
+$where = ['ra.district_id = :district_id'];
 $params = [':district_id' => $districtId];
 
 if ($status !== '' && in_array($status, ['pending','reviewed','flagged'], true)) {
-    $where[] = 'sr.status = :status';
+    $where[] = 'ra.status = :status';
     $params[':status'] = $status;
 }
 
 $whereSql = implode(' AND ', $where);
 
-$totalStmt = $pdo->prepare("SELECT COUNT(*) FROM survey_results sr WHERE {$whereSql}");
+$totalStmt = $pdo->prepare("SELECT COUNT(*) FROM risk_assessments ra WHERE {$whereSql}");
 $totalStmt->execute($params);
 $total = (int)$totalStmt->fetchColumn();
 $pagination = paginate($total, $page, DEFAULT_PAGE_LIMIT);
 
 $stmt = $pdo->prepare("
-    SELECT sr.result_id, sr.status, sr.remarks, sr.created_at,
-           s.survey_name,
+    SELECT ra.assessment_id, ra.status, ra.remarks, ra.created_at, ra.assessment_date,
            CONCAT(p.first_name, ' ', p.last_name) AS patient_name,
            CONCAT(u.full_name, ' (', u.username, ')') AS conducted_by
-    FROM survey_results sr
-    JOIN surveys s ON s.survey_id = sr.survey_id
-    JOIN patients p ON p.patient_id = sr.patient_id
-    JOIN users u ON u.user_id = sr.conducted_by
+    FROM risk_assessments ra
+    JOIN patients p ON p.patient_id = ra.patient_id
+    JOIN users u ON u.user_id = ra.conducted_by
     WHERE {$whereSql}
-    ORDER BY sr.created_at DESC
+    ORDER BY ra.assessment_date DESC
     LIMIT :limit OFFSET :offset
 ");
 $stmt->bindValue(':limit', $pagination['limit'], PDO::PARAM_INT);
@@ -53,15 +53,15 @@ foreach ($params as $k => $v) {
 $stmt->execute();
 $results = $stmt->fetchAll();
 
-$pageTitle = 'Survey Results';
+$pageTitle = 'Risk Assessments';
 require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 
 <div class="main-content">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
         <div>
-            <h2 class="mb-0">Survey Results</h2>
-            <p class="text-muted mb-0">All survey results for your district</p>
+            <h2 class="mb-0">Risk Assessments</h2>
+            <p class="text-muted mb-0">All assessments for your district</p>
         </div>
     </div>
 
@@ -90,7 +90,6 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Survey</th>
                             <th>Patient</th>
                             <th>Conducted By</th>
                             <th>Status</th>
@@ -100,21 +99,20 @@ require_once __DIR__ . '/../includes/sidebar.php';
                     </thead>
                     <tbody>
                         <?php if (!$results): ?>
-                            <tr><td colspan="6" class="text-center text-muted py-4">No survey results found.</td></tr>
+                            <tr><td colspan="5" class="text-center text-muted py-4">No assessments found.</td></tr>
                         <?php else: ?>
                             <?php foreach ($results as $r): ?>
                                 <tr>
-                                    <td><?= e($r['survey_name']) ?></td>
-                                    <td><?= e($r['patient_name']) ?></td>
+                                    <td class="fw-semibold"><?= e($r['patient_name']) ?></td>
                                     <td class="small"><?= e($r['conducted_by']) ?></td>
                                     <td>
                                         <span class="badge bg-<?= $r['status'] === 'pending' ? 'warning' : ($r['status'] === 'reviewed' ? 'success' : 'danger') ?>">
                                             <?= e(ucfirst($r['status'])) ?>
                                         </span>
                                     </td>
-                                    <td class="small text-muted"><?= e(format_datetime($r['created_at'])) ?></td>
+                                    <td class="small text-muted"><?= e(format_date($r['assessment_date'])) ?></td>
                                     <td class="text-end">
-                                        <a href="<?= e(url('nurse/survey_review.php?id=' . $r['result_id'])) ?>" class="btn btn-sm btn-outline-primary">
+                                        <a href="<?= e(url('nurse/survey_review.php?id=' . $r['assessment_id'])) ?>" class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-eye me-1"></i> Review
                                         </a>
                                     </td>

@@ -7,9 +7,11 @@ require_once __DIR__ . '/../includes/helpers.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/middleware.php';
 require_once __DIR__ . '/../includes/audit.php';
-require_once __DIR__ . '/../includes/header.php';
 
 Middleware::dpwh();
+
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/sidebar.php';
 
 $pdo = Database::getConnection();
 $districtId = (int)($_SESSION['district_id'] ?? 0);
@@ -20,17 +22,17 @@ $page = max(1, (int)($_GET['page'] ?? 1));
 $perPage = 15;
 $offset = ($page - 1) * $perPage;
 
-$where = 'sr.conducted_by = :dpwh_id';
+$where = 'ra.conducted_by = :dpwh_id';
 $params = [':dpwh_id' => $dpwhId];
 
 if ($statusFilter !== '' && in_array($statusFilter, ['pending', 'reviewed', 'flagged'], true)) {
-    $where .= ' AND sr.status = :status';
+    $where .= ' AND ra.status = :status';
     $params[':status'] = $statusFilter;
 }
 
 $totalStmt = $pdo->prepare("
     SELECT COUNT(*)
-    FROM survey_results sr
+    FROM risk_assessments ra
     WHERE {$where}
 ");
 $totalStmt->execute($params);
@@ -41,30 +43,29 @@ if ($page > $totalPages) { $page = $totalPages; }
 $offset = ($page - 1) * $perPage;
 
 $stmt = $pdo->prepare("
-    SELECT sr.result_id, sr.status, sr.created_at, s.survey_name,
+    SELECT ra.assessment_id, ra.status, ra.created_at, ra.assessment_date,
            CONCAT(p.first_name, ' ', p.last_name) AS patient_name
-    FROM survey_results sr
-    JOIN surveys s ON s.survey_id = sr.survey_id
-    JOIN patients p ON p.patient_id = sr.patient_id
+    FROM risk_assessments ra
+    JOIN patients p ON p.patient_id = ra.patient_id
     WHERE {$where}
-    ORDER BY sr.created_at DESC
+    ORDER BY ra.assessment_date DESC
     LIMIT {$perPage} OFFSET {$offset}
 ");
 $stmt->execute($params);
 $results = $stmt->fetchAll();
 
-$pageTitle = 'My Surveys';
+$pageTitle = 'My Assessments';
 require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 
 <div class="main-content">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
         <div>
-            <h2 class="mb-0">My Surveys</h2>
-            <p class="text-muted mb-0">Surveys you have submitted</p>
+            <h2 class="mb-0">My Assessments</h2>
+            <p class="text-muted mb-0">Risk assessments you have submitted</p>
         </div>
         <a href="<?= e(url('dpwh/surveys_new.php')) ?>" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-1"></i> New Survey
+            <i class="bi bi-plus-circle me-1"></i> New Assessment
         </a>
     </div>
 
@@ -100,20 +101,20 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th>Survey</th>
                             <th>Patient</th>
+                            <th>Date</th>
                             <th>Status</th>
                             <th>Submitted</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (!$results): ?>
-                            <tr><td colspan="4" class="text-center text-muted py-4">No surveys found.</td></tr>
+                            <tr><td colspan="4" class="text-center text-muted py-4">No assessments found.</td></tr>
                         <?php else: ?>
                             <?php foreach ($results as $r): ?>
                                 <tr>
-                                    <td class="fw-semibold"><?= e($r['survey_name']) ?></td>
-                                    <td><?= e($r['patient_name']) ?></td>
+                                    <td class="fw-semibold"><?= e($r['patient_name']) ?></td>
+                                    <td class="small text-muted"><?= e(format_date($r['assessment_date'])) ?></td>
                                     <td>
                                         <span class="badge bg-<?= $r['status'] === 'pending' ? 'warning' : ($r['status'] === 'reviewed' ? 'success' : 'danger') ?>">
                                             <?= e(ucfirst($r['status'])) ?>

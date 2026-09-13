@@ -53,7 +53,7 @@ function nav_item(string $url, string $label, string $icon, array $paths = []): 
         <div class="nav-section">Main</div>
         <?= nav_item(url('nurse/dashboard.php'), 'Dashboard', 'speedometer2', ['nurse/dashboard']) ?>
         <?= nav_item(url('nurse/patients.php'), 'Patients', 'people', ['nurse/patients']) ?>
-        <?= nav_item(url('nurse/survey_results.php'), 'Survey Results', 'clipboard-data', ['nurse/survey_results', 'nurse/survey_review']) ?>
+        <?= nav_item(url('nurse/survey_results.php'), 'Risk Assessments', 'clipboard-data', ['nurse/survey_results', 'nurse/survey_review']) ?>
         <?= nav_item(url('nurse/dpwh_accounts.php'), 'DPWH Accounts', 'person-gear', ['nurse/dpwh_accounts', 'nurse/dpwh_form']) ?>
 
         <div class="nav-section">Reports</div>
@@ -62,8 +62,8 @@ function nav_item(string $url, string $label, string $icon, array $paths = []): 
     <?php elseif ($role === 'dpwh'): ?>
         <div class="nav-section">Main</div>
         <?= nav_item(url('dpwh/dashboard.php'), 'Dashboard', 'speedometer2', ['dpwh/dashboard']) ?>
-        <?= nav_item(url('dpwh/surveys_new.php'), 'New Survey', 'plus-circle', ['dpwh/surveys_new']) ?>
-        <?= nav_item(url('dpwh/surveys_mine.php'), 'My Surveys', 'journal-check', ['dpwh/surveys_mine']) ?>
+        <?= nav_item(url('dpwh/surveys_new.php'), 'New Assessment', 'plus-circle', ['dpwh/surveys_new']) ?>
+        <?= nav_item(url('dpwh/surveys_mine.php'), 'My Assessments', 'journal-check', ['dpwh/surveys_mine']) ?>
     <?php endif; ?>
 </div>
 
