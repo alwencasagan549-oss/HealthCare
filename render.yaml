@@ -1,10 +1,10 @@
 services:
   - type: web
     name: ipihrs-chc
-    runtime: php
+    runtime: docker
     plan: free
-    buildCommand: composer install --no-dev --no-interaction --no-progress
-    startCommand: vendor/bin/render-php-apache2
+    buildCommand: docker build -t ipihrs-chc .
+    startCommand: docker run -p 10000 ipihrs-chc
     envVars:
       - key: PHP_VERSION
         value: "8.2"
