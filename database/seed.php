@@ -261,7 +261,8 @@ try {
     ");
 
     // First patient in district 1
-    $stmtPatientFirst = $pdo->query("SELECT patient_id FROM patients WHERE district_id = {$districtIds[0]} LIMIT 1");
+    $stmtPatientFirst = $pdo->prepare("SELECT patient_id FROM patients WHERE district_id = :district_id LIMIT 1");
+    $stmtPatientFirst->execute([':district_id' => $districtIds[0]]);
     $firstPatientId = (int)$stmtPatientFirst->fetchColumn();
 
     // First dpwh user in district 1

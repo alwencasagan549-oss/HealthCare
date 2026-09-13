@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ipihrs_chc
+      POSTGRES_USER: ipihrs_chc_user
+      POSTGRES_PASSWORD: ipihrs_chc_pass
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./database/schema.postgresql.sql:/docker-entrypoint-initdb.d/schema.postgresql.sql:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ipihrs_chc_user -d ipihrs_chc"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      APP_ENV: production
+      APP_URL: http://localhost:8080
+      DATABASE_URL: postgresql://ipihrs_chc_user:ipihrs_chc_pass@db:5432/ipihrs_chc
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ipihrs_chc
+      DB_USER: ipihrs_chc_user
+      DB_PASSWORD: ipihrs_chc_pass
+      SESSION_SECURE_COOKIE: "0"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./:/var/www/html
+
+volumes:
+  db_data:

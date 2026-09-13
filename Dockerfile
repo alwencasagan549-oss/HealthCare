@@ -1,28 +1,17 @@
 FROM php:8.2-apache
 
-# Install required PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql mysqli
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libicu-dev \
+    libzip-dev \
+    libxml2-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Enable Apache mod_rewrite if needed
-RUN a2enmod rewrite
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j"$(nproc)" gd intl pdo_pgsql zip opcache bcmath
 
-# Set working directory
-WORKDIR /var/www/html
+RUN a2enmod rewrite headers
 
-# Copy composer files first for better caching
-COPY composer.json ./
-
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Install dependencies
-RUN composer install --no-dev --no-interaction --no-progress --no-scripts --no-autoloader
-
-# Copy application files
-COPY . .
-
-# Generate autoloader
-RUN composer dump-autoload --optimize
-
-# Set proper permissions
-RUN chown -R www-data:www-data /var/www/html
+COPY . /var/www/html

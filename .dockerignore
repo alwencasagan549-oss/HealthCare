@@ -1,0 +1,10 @@
+.git
+.gitignore
+.dockerignore
+docker-compose.yml
+README.md
+.claude
+node_modules
+vendor
+tests
+*.md
