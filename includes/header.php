@@ -71,3 +71,41 @@ if (empty($_SESSION['csrf_token'])) {
 </nav>
 
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<script>
+(function () {
+    'use strict';
+
+    if (!('<?= e($pageTitle ?? '') ?>'.length)) {
+        return;
+    }
+
+    var heartbeatUrl = '<?= e(url('heartbeat.php')) ?>';
+    var intervalMs = Math.max(10000, <?= (int)SESSION_TIMEOUT ?> * 1000 / 2);
+    var timer = null;
+
+    function sendHeartbeat() {
+        if (timer) {
+            clearTimeout(timer);
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', heartbeatUrl + '?t=' + Date.now(), true);
+        xhr.timeout = 5000;
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            timer = setTimeout(sendHeartbeat, intervalMs);
+        };
+        xhr.send(null);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', sendHeartbeat);
+    } else {
+        sendHeartbeat();
+    }
+}());
+</script>

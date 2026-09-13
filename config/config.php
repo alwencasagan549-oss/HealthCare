@@ -29,7 +29,7 @@ define('LOGIN_MAX_ATTEMPTS', 5);
 define('LOGIN_LOCKOUT_WINDOW', 900); // 15 minutes
 define('PASSWORD_MIN_LENGTH', 8);
 define('BCRYPT_COST', 12);
-define('SESSION_TIMEOUT', 180); // 3 minutes of inactivity
+define('SESSION_TIMEOUT', 900); // 15 minutes of inactivity
 
 // Pagination
 define('DEFAULT_PAGE_LIMIT', 20);
