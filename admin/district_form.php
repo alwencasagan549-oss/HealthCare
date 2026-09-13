@@ -75,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $audit->log('UPDATE', 'districts', (string)$districtId, $oldValues, $newValues);
             $success = 'District updated successfully.';
+            redirect(url('admin/districts.php'));
         } else {
             // Create
             $stmt = $pdo->prepare("
@@ -94,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $newId = (int)$pdo->lastInsertId();
             $audit->log('CREATE', 'districts', (string)$newId, null, ['district_name' => $name, 'district_code' => $code]);
             $success = 'District created successfully.';
-            $districtId = $newId;
+            redirect(url('admin/districts.php'));
         }
     }
 }
