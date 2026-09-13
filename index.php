@@ -83,9 +83,7 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
 <body>
     <div class="landing-hero">
         <div class="hero-inner">
-            <div class="landing-brand-mark mx-auto" aria-hidden="true">
-                <img src="<?= e(asset_path('assets/logo/Logo1.png')) ?>" alt="<?= e(APP_SHORT_NAME) ?> logo" class="brand-logo">
-            </div>
+            <img src="<?= e(asset_path('assets/logo/Logo1.png')) ?>" alt="<?= e(APP_SHORT_NAME) ?> logo" class="brand-logo mx-auto d-block">
             <h1 class="hero-title"><?= e(APP_SHORT_NAME) ?></h1>
             <p class="hero-subtitle">Integrated Networked System for Patient Information and Record Entry — City Health Center health reporting and district management.</p>
         </div>
