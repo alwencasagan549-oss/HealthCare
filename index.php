@@ -35,7 +35,7 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
         </div>
     </header>
 
-    <main>
+    <main class="auth-page">
         <div class="section-divider"><hr></div>
         <section class="role-grid" aria-label="Login">
             <div class="auth-card">

@@ -47,7 +47,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2.5rem 1.25rem;
+    padding: 3rem 1.25rem;
     background:
         radial-gradient(circle at top left, rgba(8, 145, 178, 0.12), transparent 28rem),
         radial-gradient(circle at bottom right, rgba(34, 211, 238, 0.10), transparent 26rem),
@@ -56,7 +56,7 @@ body {
 
 .auth-brand {
     text-align: center;
-    margin-bottom: 1.75rem;
+    margin-bottom: 2rem;
 }
 
 .auth-brand-mark {
@@ -94,9 +94,23 @@ body {
     overflow: hidden;
 }
 
-.auth-header {
-    padding: 1.75rem 1.75rem 0;
-    text-align: center;
+@media (min-width: 768px) {
+    .auth-page {
+        padding: 4rem 2rem;
+    }
+
+    .auth-card {
+        max-width: 480px;
+        box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04), 0 12px 40px rgba(8, 145, 178, 0.10);
+    }
+
+    .auth-header {
+        padding: 2rem 2.25rem 0;
+    }
+
+    .auth-body {
+        padding: 1.75rem 2.25rem 2.25rem;
+    }
 }
 
 .auth-back {
@@ -125,10 +139,6 @@ body {
 .auth-header-subtitle {
     color: var(--color-muted-foreground);
     margin: 0;
-}
-
-.auth-body {
-    padding: 1.5rem 1.75rem 2rem;
 }
 
 .auth-form .form-label {
