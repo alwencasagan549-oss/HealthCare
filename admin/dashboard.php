@@ -17,7 +17,7 @@ $pdo = Database::getConnection();
 $totalDistricts = (int)$pdo->query("SELECT COUNT(*) FROM districts WHERE status = 'active'")->fetchColumn();
 $totalNurses    = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'nurse' AND status = 'active'")->fetchColumn();
 $totalPatients  = (int)$pdo->query("SELECT COUNT(*) FROM patients WHERE status = 'active'")->fetchColumn();
-$totalSurveys   = (int)$pdo->query("SELECT COUNT(*) FROM surveys WHERE is_active = 1")->fetchColumn();
+$totalSurveys   = (int)$pdo->query("SELECT COUNT(*) FROM surveys WHERE is_active = TRUE")->fetchColumn();
 $totalDpwh      = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'dpwh' AND status = 'active'")->fetchColumn();
 $pendingReviews = (int)$pdo->query("SELECT COUNT(*) FROM survey_results WHERE status = 'pending'")->fetchColumn();
 

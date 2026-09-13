@@ -27,7 +27,7 @@ $stmt = $pdo->prepare("
     LEFT JOIN survey_results sr ON sr.survey_id = s.survey_id
         AND sr.district_id = :district_id
         AND sr.created_at BETWEEN :start AND :end
-    WHERE s.is_active = 1
+    WHERE s.is_active = TRUE
     GROUP BY s.survey_id
     ORDER BY s.survey_name
 ");

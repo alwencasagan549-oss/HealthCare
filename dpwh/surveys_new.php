@@ -22,7 +22,7 @@ $success = '';
 $stmtSurveys = $pdo->prepare("
     SELECT survey_id, survey_name, survey_type, description, questions
     FROM surveys
-    WHERE is_active = 1 AND (district_id IS NULL OR district_id = :district_id)
+    WHERE is_active = TRUE AND (district_id IS NULL OR district_id = :district_id)
     ORDER BY survey_name
 ");
 $stmtSurveys->execute([':district_id' => $districtId]);
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Verify survey is available to this district
             $stmt = $pdo->prepare("
                 SELECT survey_id FROM surveys
-                WHERE survey_id = :survey_id AND is_active = 1 AND (district_id IS NULL OR district_id = :district_id)
+                WHERE survey_id = :survey_id AND is_active = TRUE AND (district_id IS NULL OR district_id = :district_id)
             ");
             $stmt->execute([':survey_id' => $surveyId, ':district_id' => $districtId]);
             if (!$stmt->fetch()) {

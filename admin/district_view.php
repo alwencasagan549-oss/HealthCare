@@ -42,7 +42,7 @@ $patientCount = (int)$pdo->prepare("SELECT COUNT(*) FROM patients WHERE district
     ->execute([':district_id' => $districtId]) ? (int)$pdo->query("SELECT COUNT(*) FROM patients WHERE district_id = {$districtId} AND status = 'active'")->fetchColumn() : 0;
 
 // Survey count
-$surveyCount = (int)$pdo->query("SELECT COUNT(*) FROM surveys WHERE district_id = {$districtId} AND is_active = 1")->fetchColumn();
+$surveyCount = (int)$pdo->query("SELECT COUNT(*) FROM surveys WHERE district_id = {$districtId} AND is_active = TRUE")->fetchColumn();
 
 // DPWH count
 $dpwhCount = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE district_id = {$districtId} AND role = 'dpwh' AND status = 'active'")->fetchColumn();

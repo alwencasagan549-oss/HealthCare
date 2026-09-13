@@ -41,7 +41,7 @@ $district = $stmt->fetch();
 $stmtSurveys = $pdo->prepare("
     SELECT survey_id, survey_name, survey_type, description
     FROM surveys
-    WHERE is_active = 1 AND (district_id IS NULL OR district_id = :district_id)
+    WHERE is_active = TRUE AND (district_id IS NULL OR district_id = :district_id)
     ORDER BY survey_name
 ");
 $stmtSurveys->execute([':district_id' => $districtId]);
