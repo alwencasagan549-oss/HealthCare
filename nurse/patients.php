@@ -18,7 +18,7 @@ $districtId = (int)($_SESSION['district_id'] ?? 0);
 $search = trim((string)($_GET['search'] ?? ''));
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 
-$where = ['p.district_id = :district_id', 'p.status = "active"'];
+$where = ['p.district_id = :district_id', "p.status = 'active'"];
 $params = [':district_id' => $districtId];
 
 if ($search !== '') {
