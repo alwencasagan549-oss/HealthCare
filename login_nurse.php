@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 // ============================================================
-// Login Page
+// Nurse Login Page
 // ============================================================
 
 require_once __DIR__ . '/config/config.php';
@@ -38,10 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $auth->attempt($username, $password);
 
         if ($user) {
-            $selectedRole = $_POST['role'] ?? '';
-
-            if ($user['role'] !== $selectedRole) {
-                $error = 'Invalid credentials for Admin login.';
+            if ($user['role'] !== 'nurse') {
+                $error = 'Invalid credentials for Nurse login.';
             } else {
                 $auth->clearFailedAttempts($username);
                 $auth->login($user);
@@ -49,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $audit = new AuditLogger($pdo);
                 $audit->login($user['user_id']);
 
-                redirect(url('admin/dashboard.php'));
+                redirect(url('nurse/dashboard.php'));
             }
         } else {
             $auth->recordFailedAttempt($username);
@@ -58,12 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$pageTitle = 'Login';
-
-$activeRole = 'admin';
-if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], true)) {
-    $activeRole = $_GET['role'];
-}
+$pageTitle = 'Nurse Login';
+$activeRole = 'nurse';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -88,15 +82,9 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
 
         <div class="auth-card">
             <div class="role-tabs" role="tablist" aria-label="Login role">
-                <button class="role-tab" type="button" role="tab" data-role="admin" aria-selected="<?= $activeRole === 'admin' ? 'true' : 'false' ?>" aria-controls="login-form-panel" id="tab-admin">
-                    Admin
-                </button>
-                <button class="role-tab" type="button" role="tab" data-role="nurse" aria-selected="<?= $activeRole === 'nurse' ? 'true' : 'false' ?>" aria-controls="login-form-panel" id="tab-nurse">
-                    Nurse
-                </button>
-                <button class="role-tab" type="button" role="tab" data-role="dpwh" aria-selected="<?= $activeRole === 'dpwh' ? 'true' : 'false' ?>" aria-controls="login-form-panel" id="tab-dpwh">
-                    DPWH
-                </button>
+                <a class="role-tab" type="button" role="tab" href="<?= e(url('login.php')) ?>" aria-selected="false">Admin</a>
+                <a class="role-tab" type="button" role="tab" href="<?= e(url('login_nurse.php')) ?>" aria-selected="true">Nurse</a>
+                <a class="role-tab" type="button" role="tab" href="<?= e(url('login_dpwh.php')) ?>" aria-selected="false">DPWH</a>
             </div>
 
             <div class="auth-header">
@@ -104,8 +92,8 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
                     <i class="bi bi-house-door" aria-hidden="true"></i>
                     <span>Back to home</span>
                 </a>
-                <h2 class="auth-header-title">Sign in</h2>
-                <p class="auth-header-subtitle">Use your assigned account to continue.</p>
+                <h2 class="auth-header-title">Nurse Login</h2>
+                <p class="auth-header-subtitle">Sign in with your Nurse account.</p>
             </div>
 
             <div class="auth-body">
@@ -116,7 +104,7 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
                     </div>
                 <?php endif; ?>
 
-                <form method="POST" action="" novalidate class="auth-form" id="login-form-panel" role="tabpanel" aria-labelledby="tab-<?= e($activeRole) ?>">
+                <form method="POST" action="" novalidate class="auth-form">
                     <?= csrf_field() ?>
                     <input type="hidden" name="role" value="<?= e($activeRole) ?>">
 
@@ -134,7 +122,7 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
                                    autocomplete="username"
                                    aria-describedby="username-help">
                         </div>
-                        <div id="username-help" class="form-text">Enter your assigned username.</div>
+                        <div id="username-help" class="form-text">Enter your assigned nurse username.</div>
                     </div>
 
                     <div class="mb-4">
@@ -169,25 +157,6 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
             </div>
         </div>
     </main>
-
-    <script>
-        (function () {
-            const tabs = document.querySelectorAll('.role-tab');
-            const roleInput = document.querySelector('input[name="role"]');
-            const form = document.getElementById('login-form-panel');
-
-            if (!tabs.length || !roleInput || !form) return;
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
-                    tab.setAttribute('aria-selected', 'true');
-                    roleInput.value = tab.dataset.role;
-                    form.setAttribute('aria-labelledby', tab.id);
-                });
-            });
-        })();
-    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
