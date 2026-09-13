@@ -15,7 +15,7 @@ class Middleware
                 'admin' => url('admin/dashboard.php'),
                 'nurse' => url('nurse/dashboard.php'),
                 'dpwh'  => url('dpwh/dashboard.php'),
-                default => url('login.php'),
+                default => url('index.php'),
             };
             redirect($dashboard);
         }
@@ -24,7 +24,7 @@ class Middleware
     public static function authenticated(): void
     {
         if (!is_logged_in()) {
-            redirect(url('login.php?expired=1'));
+            redirect(url('index.php?expired=1'));
         }
     }
 

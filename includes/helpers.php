@@ -243,7 +243,7 @@ if (!function_exists('is_dpwh')) {
 if (!function_exists('require_role')) {
     function require_role(string ...$allowedRoles): void {
         if (!is_logged_in()) {
-            redirect(url('login.php'));
+            redirect(url('index.php'));
         }
 
         if (!in_array($_SESSION['role'], $allowedRoles, true)) {
@@ -257,7 +257,7 @@ if (!function_exists('require_role')) {
 if (!function_exists('require_auth')) {
     function require_auth(): void {
         if (!is_logged_in()) {
-            redirect(url('login.php'));
+            redirect(url('index.php'));
         }
     }
 }

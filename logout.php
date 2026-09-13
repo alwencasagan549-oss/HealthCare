@@ -19,4 +19,4 @@ $audit->logout((int)$userId);
 $auth = new Auth($pdo);
 $auth->logout();
 
-redirect(url('login.php'));
+redirect(url('index.php'));
