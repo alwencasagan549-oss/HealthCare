@@ -564,7 +564,7 @@ body {
 
 /* Landing page enhancements */
 .landing-hero {
-    background: #ffffff;
+    background: var(--color-blue-50);
     color: var(--color-foreground);
     padding: var(--space-16) var(--space-5) var(--space-14);
     text-align: center;
