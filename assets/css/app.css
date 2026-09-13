@@ -602,7 +602,7 @@ body {
     height: 160px;
     object-fit: contain;
     display: block;
-    margin: 0 auto;
+    margin: 3.5rem auto 0;
 }
 
 .landing-hero .hero-subtitle {
@@ -669,6 +669,7 @@ body {
     .landing-hero .brand-logo {
         width: 184px;
         height: 184px;
+        margin-top: 4rem;
     }
 
     .landing-hero .hero-title {
