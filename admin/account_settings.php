@@ -20,7 +20,6 @@ $audit = new AuditLogger($pdo);
 $currentAdminId = (int)($_SESSION['user_id'] ?? 0);
 $errors = [];
 $success = flash('success');
-$temporaryPassword = '';
 
 // ---------------------------------------------------------------
 // Section A — Admin: Update own username
@@ -137,33 +136,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['form_type'] ?? '') === 'us
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['form_type'] ?? '') === 'user_password') {
     $targetUserId = (int)($_POST['target_user_id'] ?? 0);
     $targetRole = (string)($_POST['target_role'] ?? '');
+    $newPassword = (string)($_POST['new_password'] ?? '');
     $csrfToken = (string)($_POST['csrf_token'] ?? '');
 
     if (!in_array($targetRole, ['nurse', 'dpwh'], true)) {
         $errors[] = 'Invalid user role.';
     } elseif ($targetUserId === 0) {
         $errors[] = 'Invalid user.';
+    } elseif (empty($newPassword)) {
+        $errors[] = 'New password is required.';
     } elseif (!verify_csrf($csrfToken)) {
         $errors[] = 'Invalid request. Please try again.';
     } else {
-        $tempPassword = generate_temporary_password();
-        $passwordHash = password_hash($tempPassword, PASSWORD_BCRYPT, ['cost' => BCRYPT_COST]);
+        $validationErrors = validate_password($newPassword);
+        if (!empty($validationErrors)) {
+            $errors = array_merge($errors, $validationErrors);
+        }
 
-        $stmt = $pdo->prepare("
-            UPDATE users
-            SET password_hash = :hash, force_password_change = TRUE, updated_at = NOW()
-            WHERE user_id = :user_id AND role = :role
-        ");
-        $stmt->execute([
-            ':hash'  => $passwordHash,
-            ':user_id' => $targetUserId,
-            ':role'  => $targetRole,
-        ]);
+        if (empty($errors)) {
+            $passwordHash = password_hash($newPassword, PASSWORD_BCRYPT, ['cost' => BCRYPT_COST]);
 
-        $audit->log('UPDATE', 'users', (string)$targetUserId, null, ['force_password_change' => TRUE, 'role' => $targetRole], $currentAdminId);
+            $stmt = $pdo->prepare("
+                UPDATE users
+                SET password_hash = :hash, force_password_change = TRUE, updated_at = NOW()
+                WHERE user_id = :user_id AND role = :role
+            ");
+            $stmt->execute([
+                ':hash'  => $passwordHash,
+                ':user_id' => $targetUserId,
+                ':role'  => $targetRole,
+            ]);
 
-        $success = ucfirst($targetRole) . ' password reset successfully.';
-        $temporaryPassword = $tempPassword;
+            $audit->log('UPDATE', 'users', (string)$targetUserId, null, ['force_password_change' => TRUE, 'role' => $targetRole], $currentAdminId);
+
+            $success = ucfirst($targetRole) . ' password updated successfully.';
+        }
     }
 }
 
@@ -228,15 +235,6 @@ $pageScripts = [];
                     <li><?= e($err) ?></li>
                 <?php endforeach; ?>
             </ul>
-        </div>
-    <?php endif; ?>
-
-    <?php if (!empty($temporaryPassword)): ?>
-        <div class="alert alert-success">
-            <strong>Generated temporary password (share securely):</strong>
-            <div class="mt-2 p-3 bg-white border rounded">
-                <code class="text-danger fs-5"><?= e($temporaryPassword) ?></code>
-            </div>
         </div>
     <?php endif; ?>
 
@@ -385,7 +383,11 @@ $pageScripts = [];
                                                     <input type="hidden" name="form_type" value="user_password">
                                                     <input type="hidden" name="target_user_id" value="<?= e((string)$n['user_id']) ?>">
                                                     <input type="hidden" name="target_role" value="nurse">
-                                                    <p class="text-muted">A temporary password will be generated and shown once. Share it securely with the nurse.</p>
+                                                    <p class="text-muted">Enter a new password for this nurse.</p>
+                                                    <div class="mt-3">
+                                                        <label for="nurse_password_<?= e((string)$n['user_id']) ?>" class="form-label">New Password</label>
+                                                        <input type="password" class="form-control" id="nurse_password_<?= e((string)$n['user_id']) ?>" name="new_password" required minlength="<?= PASSWORD_MIN_LENGTH ?>">
+                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -494,7 +496,11 @@ $pageScripts = [];
                                                     <input type="hidden" name="form_type" value="user_password">
                                                     <input type="hidden" name="target_user_id" value="<?= e((string)$d['user_id']) ?>">
                                                     <input type="hidden" name="target_role" value="dpwh">
-                                                    <p class="text-muted">A temporary password will be generated and shown once. Share it securely with the DPWH user.</p>
+                                                    <p class="text-muted">Enter a new password for this DPWH user.</p>
+                                                    <div class="mt-3">
+                                                        <label for="dpwh_password_<?= e((string)$d['user_id']) ?>" class="form-label">New Password</label>
+                                                        <input type="password" class="form-control" id="dpwh_password_<?= e((string)$d['user_id']) ?>" name="new_password" required minlength="<?= PASSWORD_MIN_LENGTH ?>">
+                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
