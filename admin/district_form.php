@@ -51,51 +51,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($districtId > 0) {
             // Update
             $oldValues = $district ?: [];
-            $stmt = $pdo->prepare("
-                UPDATE districts
-                SET district_name = :name, district_code = :code, address = :address,
-                    contact_number = :contact, email = :email, status = :status
-                WHERE district_id = :id
-            ");
-            $stmt->execute([
-                ':name' => $name,
-                ':code' => $code,
-                ':address' => $address ?: null,
-                ':contact' => $contactNumber ?: null,
-                ':email' => $email ?: null,
-                ':status' => $status,
-                ':id' => $districtId,
-            ]);
+            try {
+                $stmt = $pdo->prepare("
+                    UPDATE districts
+                    SET district_name = :name, district_code = :code, address = :address,
+                        contact_number = :contact, email = :email, status = :status
+                    WHERE district_id = :id
+                ");
+                $stmt->execute([
+                    ':name' => $name,
+                    ':code' => $code,
+                    ':address' => $address ?: null,
+                    ':contact' => $contactNumber ?: null,
+                    ':email' => $email ?: null,
+                    ':status' => $status,
+                    ':id' => $districtId,
+                ]);
 
-            $newValues = [
-                'district_name' => $name,
-                'district_code' => $code,
-                'status' => $status,
-            ];
+                $newValues = [
+                    'district_name' => $name,
+                    'district_code' => $code,
+                    'status' => $status,
+                ];
 
-            $audit->log('UPDATE', 'districts', (string)$districtId, $oldValues, $newValues);
-            $success = 'District updated successfully.';
-            redirect(url('admin/districts.php'));
+                $audit->log('UPDATE', 'districts', (string)$districtId, $oldValues, $newValues);
+                redirect(url('admin/districts.php'));
+            } catch (Throwable $e) {
+                error_log('District update error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+                $errors[] = 'Failed to update district. Please try again or contact support.';
+            }
         } else {
             // Create
-            $stmt = $pdo->prepare("
-                INSERT INTO districts (district_name, district_code, address, contact_number, email, status, created_by)
-                VALUES (:name, :code, :address, :contact, :email, :status, :created_by)
-            ");
-            $stmt->execute([
-                ':name' => $name,
-                ':code' => $code,
-                ':address' => $address ?: null,
-                ':contact' => $contactNumber ?: null,
-                ':email' => $email ?: null,
-                ':status' => $status,
-                ':created_by' => $_SESSION['user_id'] ?? null,
-            ]);
+            try {
+                $stmt = $pdo->prepare("
+                    INSERT INTO districts (district_name, district_code, address, contact_number, email, status, created_by)
+                    VALUES (:name, :code, :address, :contact, :email, :status, :created_by)
+                ");
+                $stmt->execute([
+                    ':name' => $name,
+                    ':code' => $code,
+                    ':address' => $address ?: null,
+                    ':contact' => $contactNumber ?: null,
+                    ':email' => $email ?: null,
+                    ':status' => $status,
+                    ':created_by' => $_SESSION['user_id'] ?? null,
+                ]);
 
-            $newId = (int)$pdo->lastInsertId();
-            $audit->log('CREATE', 'districts', (string)$newId, null, ['district_name' => $name, 'district_code' => $code]);
-            $success = 'District created successfully.';
-            redirect(url('admin/districts.php'));
+                $newId = (int)$pdo->lastInsertId();
+                $audit->log('CREATE', 'districts', (string)$newId, null, ['district_name' => $name, 'district_code' => $code]);
+                redirect(url('admin/districts.php'));
+            } catch (Throwable $e) {
+                error_log('District create error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+                $errors[] = 'Failed to create district. Please try again or contact support.';
+            }
         }
     }
 }
