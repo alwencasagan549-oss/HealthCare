@@ -60,7 +60,7 @@ if (APP_DEBUG) {
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
 } else {
-    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~(defined('E_STRICT') ? E_STRICT : 0));
+    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
     ini_set('display_errors', '0');
     ini_set('display_startup_errors', '0');
     ini_set('log_errors', '1');

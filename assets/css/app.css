@@ -142,15 +142,15 @@ body {
 .brand-mark {
     width: 80px;
     height: 80px;
-    border-radius: var(--radius-lg);
-    background: transparent;
+    border-radius: 50%;
+    background: var(--color-white);
     color: var(--color-white);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     margin-bottom: var(--space-3);
-    box-shadow: none;
-    padding: 0;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 6px 18px rgba(37, 99, 235, 0.10);
+    padding: 12px;
 }
 
 .brand-logo {
@@ -217,6 +217,7 @@ body {
         width: 96px;
         height: 96px;
         margin-bottom: var(--space-4);
+        padding: 14px;
     }
 }
 

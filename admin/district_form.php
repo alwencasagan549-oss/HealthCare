@@ -21,16 +21,22 @@ $audit = new AuditLogger($pdo);
 $district = null;
 $errors = [];
 $success = '';
+$districtQueryError = null;
 
 $districtId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($districtId > 0) {
-    $stmt = $pdo->prepare("SELECT * FROM districts WHERE district_id = :id LIMIT 1");
-    $stmt->execute([':id' => $districtId]);
-    $district = $stmt->fetch();
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM districts WHERE district_id = :id LIMIT 1");
+        $stmt->execute([':id' => $districtId]);
+        $district = $stmt->fetch();
 
-    if (!$district) {
-        redirect(url('admin/districts.php'));
+        if (!$district) {
+            redirect(url('admin/districts.php'));
+        }
+    } catch (Throwable $e) {
+        $districtQueryError = 'District lookup failed: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        error_log($districtQueryError);
     }
 }
 
@@ -129,6 +135,10 @@ $pageTitle = $districtId > 0 ? 'Edit District' : 'Add District';
         </nav>
         <h2 class="mb-0"><?= e($pageTitle) ?></h2>
     </div>
+
+    <?php if ($districtQueryError): ?>
+        <div class="alert alert-danger"><?= e($districtQueryError) ?></div>
+    <?php endif; ?>
 
     <?php if ($success): ?>
         <div class="alert alert-success"><?= e($success) ?></div>
