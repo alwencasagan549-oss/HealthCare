@@ -10,6 +10,8 @@ require_once __DIR__ . '/../includes/audit.php';
 
 Middleware::admin();
 
+error_log('district_form request: method=' . $_SERVER['REQUEST_METHOD'] . ', id=' . ($_GET['id'] ?? ''));
+
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/sidebar.php';
 
@@ -41,6 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = (string)($_POST['status'] ?? 'active');
     $csrfToken = (string)($_POST['csrf_token'] ?? '');
 
+    error_log('district_form POST: districtId=' . $districtId . ', name=' . $name . ', code=' . $code . ', status=' . $status);
+
     if (!verify_csrf($csrfToken)) {
         $errors[] = 'Invalid request. Please try again.';
     } elseif (empty($name) || empty($code)) {
@@ -68,6 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':id' => $districtId,
                 ]);
 
+                error_log('district_form UPDATE success: districtId=' . $districtId . ', rows=' . $stmt->rowCount());
+
                 $newValues = [
                     'district_name' => $name,
                     'district_code' => $code,
@@ -75,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ];
 
                 $audit->log('UPDATE', 'districts', (string)$districtId, $oldValues, $newValues);
+                error_log('district_form audit log success');
                 redirect(url('admin/districts.php'));
             } catch (Throwable $e) {
                 error_log('District update error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
