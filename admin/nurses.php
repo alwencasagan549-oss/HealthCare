@@ -28,7 +28,6 @@ $stmt = $pdo->query("
 $nurses = $stmt->fetchAll();
 
 $pageTitle = 'Nurses';
-require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 
 <div class="main-content">

@@ -42,7 +42,6 @@ $stmt->execute([
 $reportData = $stmt->fetchAll();
 
 $pageTitle = 'Reports';
-require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 
 <div class="main-content">

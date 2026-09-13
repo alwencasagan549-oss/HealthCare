@@ -37,7 +37,6 @@ $stmt->execute();
 $logs = $stmt->fetchAll();
 
 $pageTitle = 'Audit Logs';
-require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 
 <div class="main-content">

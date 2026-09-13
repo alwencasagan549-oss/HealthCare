@@ -101,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $pageTitle = $districtId > 0 ? 'Edit District' : 'Add District';
-require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 
 <div class="main-content">

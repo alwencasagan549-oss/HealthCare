@@ -103,7 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $pageTitle = 'Assign Nurse';
-require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 
 <div class="main-content">
