@@ -15,30 +15,43 @@ require_once __DIR__ . '/../includes/sidebar.php';
 
 $pdo = Database::getConnection();
 
-// City-wide stats
-$totalDistricts = (int)$pdo->query("SELECT COUNT(*) FROM districts WHERE status = 'active'")->fetchColumn();
-$totalNurses    = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'nurse' AND status = 'active'")->fetchColumn();
-$totalPatients  = (int)$pdo->query("SELECT COUNT(*) FROM patients WHERE status = 'active'")->fetchColumn();
-$totalSurveys   = (int)$pdo->query("SELECT COUNT(*) FROM surveys WHERE is_active = TRUE")->fetchColumn();
-$totalDpwh      = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'dpwh' AND status = 'active'")->fetchColumn();
-$pendingReviews = (int)$pdo->query("SELECT COUNT(*) FROM risk_assessments WHERE status = 'pending'")->fetchColumn();
-$totalAssessments = (int)$pdo->query("SELECT COUNT(*) FROM risk_assessments")->fetchColumn();
+$totalDistricts = 0;
+$totalNurses    = 0;
+$totalPatients  = 0;
+$totalSurveys   = 0;
+$totalDpwh      = 0;
+$pendingReviews = 0;
+$totalAssessments = 0;
+$districts = [];
 
-// District breakdown
-$stmt = $pdo->query("
-    SELECT d.district_id, d.district_name, d.district_code,
-           COUNT(DISTINCT p.patient_id) AS patient_count,
-           COUNT(DISTINCT u.user_id) AS nurse_count,
-           COUNT(DISTINCT dp.user_id) AS dpwh_count
-    FROM districts d
-    LEFT JOIN patients p ON p.district_id = d.district_id AND p.status = 'active'
-    LEFT JOIN users u ON u.district_id = d.district_id AND u.role = 'nurse' AND u.status = 'active'
-    LEFT JOIN users dp ON dp.district_id = d.district_id AND dp.role = 'dpwh' AND dp.status = 'active'
-    WHERE d.status = 'active'
-    GROUP BY d.district_id
-    ORDER BY d.district_name
-");
-$districts = $stmt->fetchAll();
+try {
+    // City-wide stats
+    $totalDistricts   = (int)$pdo->query("SELECT COUNT(*) FROM districts WHERE status = 'active'")->fetchColumn();
+    $totalNurses      = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'nurse' AND status = 'active'")->fetchColumn();
+    $totalPatients    = (int)$pdo->query("SELECT COUNT(*) FROM patients WHERE status = 'active'")->fetchColumn();
+    $totalSurveys     = (int)$pdo->query("SELECT COUNT(*) FROM surveys WHERE is_active = TRUE")->fetchColumn();
+    $totalDpwh        = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'dpwh' AND status = 'active'")->fetchColumn();
+    $pendingReviews   = (int)$pdo->query("SELECT COUNT(*) FROM risk_assessments WHERE status = 'pending'")->fetchColumn();
+    $totalAssessments = (int)$pdo->query("SELECT COUNT(*) FROM risk_assessments")->fetchColumn();
+
+    // District breakdown
+    $stmt = $pdo->query("
+        SELECT d.district_id, d.district_name, d.district_code,
+               COUNT(DISTINCT p.patient_id) AS patient_count,
+               COUNT(DISTINCT u.user_id) AS nurse_count,
+               COUNT(DISTINCT dp.user_id) AS dpwh_count
+        FROM districts d
+        LEFT JOIN patients p ON p.district_id = d.district_id AND p.status = 'active'
+        LEFT JOIN users u ON u.district_id = d.district_id AND u.role = 'nurse' AND u.status = 'active'
+        LEFT JOIN users dp ON dp.district_id = d.district_id AND dp.role = 'dpwh' AND dp.status = 'active'
+        WHERE d.status = 'active'
+        GROUP BY d.district_id
+        ORDER BY d.district_name
+    ");
+    $districts = $stmt->fetchAll();
+} catch (Throwable $e) {
+    error_log('Dashboard query error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+}
 
 $pageTitle = 'Dashboard';
 $pageStyles = [];
