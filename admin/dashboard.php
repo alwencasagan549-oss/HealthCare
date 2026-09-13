@@ -95,6 +95,21 @@ try {
     <?php if ($dashboardQueryError): ?>
         <div class="alert alert-danger">Dashboard query failed: <?= e($dashboardQueryError) ?></div>
     <?php endif; ?>
+
+    <div class="alert alert-info">
+        <strong>Debug:</strong>
+        districts count = <?= count($districts) ?>;
+        totalDistricts = <?= (int)$totalDistricts ?>;
+        totalNurses = <?= (int)$totalNurses ?>;
+        totalPatients = <?= (int)$totalPatients ?>;
+        totalSurveys = <?= (int)$totalSurveys ?>;
+        totalDpwh = <?= (int)$totalDpwh ?>;
+        pendingReviews = <?= (int)$pendingReviews ?>;
+        totalAssessments = <?= (int)$totalAssessments ?>.
+        <?php if (!empty($districts)): ?>
+            <br>First district: <?= e($districts[0]['district_name'] ?? '') ?> / <?= e($districts[0]['district_code'] ?? '') ?>.
+        <?php endif; ?>
+    </div>
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
         <div>
             <h2 class="dashboard-section-title">Dashboard</h2>
