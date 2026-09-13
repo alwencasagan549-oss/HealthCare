@@ -94,7 +94,7 @@ class Auth
     {
         $stmt = $this->pdo->prepare("
             UPDATE users
-            SET password_hash = :hash, force_password_change = 0, updated_at = NOW()
+            SET password_hash = :hash, force_password_change = FALSE, updated_at = NOW()
             WHERE user_id = :user_id
         ");
         $stmt->execute([
