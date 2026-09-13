@@ -49,13 +49,20 @@ try {
     ");
     $districts = $stmt->fetchAll();
 } catch (Throwable $e) {
-    error_log('Dashboard query error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+    $dashboardQueryError = $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+    error_log('Dashboard query error: ' . $dashboardQueryError);
 }
 
 $pageTitle = 'Dashboard';
 $pageStyles = [];
 $pageScripts = [];
+$dashboardQueryError = null;
 ?>
+
+<div class="main-content">
+    <?php if ($dashboardQueryError): ?>
+        <div class="alert alert-danger">Dashboard query failed: <?= e($dashboardQueryError) ?></div>
+    <?php endif; ?>
 
 <div class="main-content">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">

@@ -10,11 +10,6 @@ require_once __DIR__ . '/../includes/audit.php';
 
 Middleware::admin();
 
-error_log('district_form request: method=' . $_SERVER['REQUEST_METHOD'] . ', id=' . ($_GET['id'] ?? ''));
-
-require_once __DIR__ . '/../includes/header.php';
-require_once __DIR__ . '/../includes/sidebar.php';
-
 $pdo = Database::getConnection();
 $audit = new AuditLogger($pdo);
 
@@ -25,21 +20,9 @@ $districtQueryError = null;
 
 $districtId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-if ($districtId > 0) {
-    try {
-        $stmt = $pdo->prepare("SELECT * FROM districts WHERE district_id = :id LIMIT 1");
-        $stmt->execute([':id' => $districtId]);
-        $district = $stmt->fetch();
-
-        if (!$district) {
-            redirect(url('admin/districts.php'));
-        }
-    } catch (Throwable $e) {
-        $districtQueryError = 'District lookup failed: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
-        error_log($districtQueryError);
-    }
-}
-
+// --------------------------------------------------------
+// Handle POST before any output so redirect() can send headers
+// --------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim((string)($_POST['district_name'] ?? ''));
     $code = strtoupper(trim((string)($_POST['district_code'] ?? '')));
@@ -59,7 +42,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Invalid status.';
     } else {
         if ($districtId > 0) {
-            // Update
+            // Load existing district for audit oldValues before update
+            try {
+                $stmt = $pdo->prepare("SELECT * FROM districts WHERE district_id = :id LIMIT 1");
+                $stmt->execute([':id' => $districtId]);
+                $district = $stmt->fetch();
+            } catch (Throwable $e) {
+                error_log('District preload error: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+            }
+
             $oldValues = $district ?: [];
             try {
                 $stmt = $pdo->prepare("
@@ -121,7 +112,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// --------------------------------------------------------
+// Load district data for GET requests or after POST errors
+// --------------------------------------------------------
+if ($districtId > 0 && !$district) {
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM districts WHERE district_id = :id LIMIT 1");
+        $stmt->execute([':id' => $districtId]);
+        $district = $stmt->fetch();
+
+        if (!$district) {
+            redirect(url('admin/districts.php'));
+        }
+    } catch (Throwable $e) {
+        $districtQueryError = 'District lookup failed: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
+        error_log($districtQueryError);
+    }
+}
+
 $pageTitle = $districtId > 0 ? 'Edit District' : 'Add District';
+
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 
 <div class="main-content">
