@@ -95,9 +95,9 @@ if (isset($_GET['role']) && in_array($_GET['role'], ['admin', 'nurse', 'dpwh'], 
 
                     <div class="auth-card">
                         <div class="role-tabs" role="tablist" aria-label="Login role">
-                            <button class="role-tab" type="button" role="tab" data-role="admin" aria-selected="<?= $activeRole === 'admin' ? 'true' : 'false' ?>">Admin</button>
-                            <button class="role-tab" type="button" role="tab" data-role="nurse" aria-selected="<?= $activeRole === 'nurse' ? 'true' : 'false' ?>">Nurse</button>
-                            <button class="role-tab" type="button" role="tab" data-role="dpwh" aria-selected="<?= $activeRole === 'dpwh' ? 'true' : 'false' ?>">DPWH</button>
+                            <button class="role-tab" id="tab-admin" type="button" role="tab" data-role="admin" aria-selected="<?= $activeRole === 'admin' ? 'true' : 'false' ?>" aria-controls="login-form-panel">Admin</button>
+                            <button class="role-tab" id="tab-nurse" type="button" role="tab" data-role="nurse" aria-selected="<?= $activeRole === 'nurse' ? 'true' : 'false' ?>" aria-controls="login-form-panel">Nurse</button>
+                            <button class="role-tab" id="tab-dpwh" type="button" role="tab" data-role="dpwh" aria-selected="<?= $activeRole === 'dpwh' ? 'true' : 'false' ?>" aria-controls="login-form-panel">DPWH</button>
                         </div>
 
                         <div class="auth-body">

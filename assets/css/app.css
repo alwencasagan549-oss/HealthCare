@@ -8,13 +8,13 @@
     --primary-dark: #026aa7;
 
     /* Primitives */
-    --color-cyan-600: #0891b2;
-    --color-cyan-700: #0e7490;
-    --color-cyan-900: #164e63;
-    --color-cyan-50: #ecfeff;
-    --color-cyan-100: #cffafe;
-    --color-cyan-200: #a5f3fc;
-    --color-cyan-400: #22d3ee;
+    --color-blue-600: #2563eb;
+    --color-blue-700: #1d4ed8;
+    --color-blue-900: #1e3a8a;
+    --color-blue-50: #eff6ff;
+    --color-blue-100: #dbeafe;
+    --color-blue-200: #bfdbfe;
+    --color-blue-400: #60a5fa;
     --color-emerald-600: #059669;
     --color-emerald-700: #047857;
     --color-slate-50: #f8fafc;
@@ -29,30 +29,31 @@
     --color-red-600: #dc2626;
 
     /* Semantic */
-    --color-primary: var(--color-cyan-600);
-    --color-primary-dark: var(--color-cyan-700);
-    --color-primary-deeper: var(--color-cyan-900);
-    --color-secondary: var(--color-cyan-400);
+    --color-primary: var(--color-blue-600);
+    --color-primary-dark: var(--color-blue-700);
+    --color-primary-deeper: var(--color-blue-900);
+    --color-secondary: var(--color-blue-400);
     --color-accent: var(--color-emerald-600);
     --color-accent-hover: var(--color-emerald-700);
-    --color-background: var(--color-cyan-50);
-    --color-foreground: var(--color-cyan-900);
+    --color-background: var(--color-blue-50);
+    --color-foreground: var(--color-blue-900);
     --color-card: var(--color-white);
-    --color-card-foreground: var(--color-cyan-900);
-    --color-muted: var(--color-cyan-100);
+    --color-card-foreground: var(--color-blue-900);
+    --color-muted: var(--color-blue-100);
     --color-muted-foreground: var(--color-slate-500);
-    --color-border: var(--color-cyan-200);
-    --color-ring: var(--color-cyan-600);
+    --color-border: var(--color-blue-200);
+    --color-ring: var(--color-blue-600);
     --color-danger: var(--color-red-600);
     --color-danger-foreground: var(--color-white);
     --color-input-bg: var(--color-slate-50);
     --color-input-border: var(--color-slate-300);
     --color-input-text: var(--color-slate-900);
     --color-input-placeholder: var(--color-slate-400);
-    --color-focus-ring: rgba(8, 145, 178, 0.22);
+    --color-focus-ring: rgba(37, 99, 235, 0.22);
     --color-tab-bg: var(--color-slate-50);
     --color-tab-text: var(--color-slate-600);
     --color-tab-hover-text: var(--color-slate-900);
+    --color-tab-indicator: var(--color-primary-dark);
 
     /* Component */
     --button-bg: var(--color-primary);
@@ -128,8 +129,8 @@ body {
     justify-content: center;
     padding: var(--space-12) var(--space-4);
     background:
-        radial-gradient(circle at top left, rgba(8, 145, 178, 0.12), transparent 28rem),
-        radial-gradient(circle at bottom right, rgba(34, 211, 238, 0.10), transparent 26rem),
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.10), transparent 28rem),
+        radial-gradient(circle at bottom right, rgba(96, 165, 250, 0.10), transparent 26rem),
         var(--color-background);
 }
 
@@ -185,7 +186,7 @@ body {
 
     .auth-card {
         max-width: 440px;
-        box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04), 0 12px 40px rgba(8, 145, 178, 0.10);
+        box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04), 0 12px 40px rgba(37, 99, 235, 0.10);
     }
 
     .auth-body {
@@ -220,16 +221,6 @@ body {
 .auth-back:hover {
     color: var(--color-primary);
     text-decoration: none;
-}
-
-.auth-header-title {
-    font-weight: 700;
-    margin-bottom: var(--space-1);
-}
-
-.auth-header-subtitle {
-    color: var(--color-muted-foreground);
-    margin: 0;
 }
 
 .auth-form .form-label {
@@ -298,7 +289,7 @@ body {
 .auth-submit:hover {
     background: var(--button-hover-bg);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(8, 145, 178, 0.15);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
 }
 
 .auth-submit:active {
@@ -368,7 +359,7 @@ body {
 .role-tab[aria-selected="true"] {
     color: var(--tab-active-text);
     background: var(--tab-active-bg);
-    border-bottom-color: var(--color-primary-dark);
+    border-bottom-color: var(--color-tab-indicator);
 }
 
 .role-tab:focus-visible {
@@ -439,7 +430,7 @@ body {
 
 .role-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(8, 145, 178, 0.10);
+    box-shadow: 0 12px 30px rgba(37, 99, 235, 0.10);
 }
 
 .role-icon {
