@@ -33,7 +33,6 @@ $stmt = $pdo->query("
 $districts = $stmt->fetchAll();
 
 $pageTitle = 'Districts';
-require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 
 <div class="main-content">

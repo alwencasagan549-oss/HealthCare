@@ -56,8 +56,6 @@ try {
 $pageTitle = 'Dashboard';
 $pageStyles = [];
 $pageScripts = [];
-
-require_once __DIR__ . '/../includes/sidebar.php';
 ?>
 
 <div class="main-content">
