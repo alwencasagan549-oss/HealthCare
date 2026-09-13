@@ -56,7 +56,7 @@ if (session_status() === PHP_SESSION_ACTIVE) {
                 <div class="col-sm-10 col-md-8 col-lg-5 col-xl-4">
                     <div class="text-center mb-4">
                         <div class="brand-mark mx-auto" aria-hidden="true">
-                            <img src="<?= e(asset_path('assets/logo/Logo.jpg')) ?>" alt="<?= e(APP_SHORT_NAME) ?> logo" class="brand-logo">
+                            <img src="<?= e(asset_path('assets/logo/Logo1.png')) ?>" alt="<?= e(APP_SHORT_NAME) ?> logo" class="brand-logo">
                         </div>
                         <h1 class="h3 fw-bold mb-2"><?= e(APP_SHORT_NAME) ?></h1>
                         <p class="text-muted mb-0">City Health Center health reporting</p>
