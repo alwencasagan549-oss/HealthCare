@@ -593,13 +593,13 @@ body {
     font-weight: 800;
     font-size: var(--font-size-2xl);
     color: var(--color-foreground);
-    margin-top: var(--space-4);
+    margin-top: var(--space-2);
     margin-bottom: var(--space-3);
 }
 
 .landing-hero .brand-logo {
-    width: 128px;
-    height: 128px;
+    width: 160px;
+    height: 160px;
     object-fit: contain;
     display: block;
     margin: 0 auto;
@@ -667,13 +667,13 @@ body {
     }
 
     .landing-hero .brand-logo {
-        width: 152px;
-        height: 152px;
+        width: 184px;
+        height: 184px;
     }
 
     .landing-hero .hero-title {
         font-size: 2.5rem;
-        margin-top: var(--space-5);
+        margin-top: var(--space-3);
     }
 
     .landing-hero .hero-subtitle {
