@@ -7,9 +7,11 @@ require_once __DIR__ . '/../includes/helpers.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/middleware.php';
 require_once __DIR__ . '/../includes/audit.php';
-require_once __DIR__ . '/../includes/header.php';
 
 Middleware::admin();
+
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/sidebar.php';
 
 $pdo = Database::getConnection();
 
@@ -19,7 +21,8 @@ $totalNurses    = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'nur
 $totalPatients  = (int)$pdo->query("SELECT COUNT(*) FROM patients WHERE status = 'active'")->fetchColumn();
 $totalSurveys   = (int)$pdo->query("SELECT COUNT(*) FROM surveys WHERE is_active = TRUE")->fetchColumn();
 $totalDpwh      = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'dpwh' AND status = 'active'")->fetchColumn();
-$pendingReviews = (int)$pdo->query("SELECT COUNT(*) FROM survey_results WHERE status = 'pending'")->fetchColumn();
+$pendingReviews = (int)$pdo->query("SELECT COUNT(*) FROM risk_assessments WHERE status = 'pending'")->fetchColumn();
+$totalAssessments = (int)$pdo->query("SELECT COUNT(*) FROM risk_assessments")->fetchColumn();
 
 // District breakdown
 $stmt = $pdo->query("
@@ -164,8 +167,8 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between py-2 border-bottom">
-                        <span class="text-muted">Survey Templates</span>
-                        <span class="fw-semibold"><?= e((string)$totalSurveys) ?></span>
+                        <span class="text-muted">Total Assessments</span>
+                        <span class="fw-semibold"><?= e((string)$totalAssessments) ?></span>
                     </div>
                     <div class="d-flex justify-content-between py-2 border-bottom">
                         <span class="text-muted">DPWH Accounts</span>

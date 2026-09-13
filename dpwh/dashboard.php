@@ -7,28 +7,30 @@ require_once __DIR__ . '/../includes/helpers.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/middleware.php';
 require_once __DIR__ . '/../includes/audit.php';
-require_once __DIR__ . '/../includes/header.php';
 
 Middleware::dpwh();
+
+require_once __DIR__ . '/../includes/header.php';
+require_once __DIR__ . '/../includes/sidebar.php';
 
 $pdo = Database::getConnection();
 $districtId = (int)($_SESSION['district_id'] ?? 0);
 $dpwhId = (int)($_SESSION['user_id'] ?? 0);
 
 // Stats
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM survey_results WHERE conducted_by = :dpwh_id");
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM risk_assessments WHERE conducted_by = :dpwh_id");
 $stmt->execute([':dpwh_id' => $dpwhId]);
 $mySurveys = (int)$stmt->fetchColumn();
 
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM survey_results WHERE conducted_by = :dpwh_id AND status = 'pending'");
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM risk_assessments WHERE conducted_by = :dpwh_id AND status = 'pending'");
 $stmt->execute([':dpwh_id' => $dpwhId]);
 $pendingMine = (int)$stmt->fetchColumn();
 
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM survey_results WHERE conducted_by = :dpwh_id AND status = 'reviewed'");
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM risk_assessments WHERE conducted_by = :dpwh_id AND status = 'reviewed'");
 $stmt->execute([':dpwh_id' => $dpwhId]);
 $reviewedMine = (int)$stmt->fetchColumn();
 
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM survey_results WHERE conducted_by = :dpwh_id AND status = 'flagged'");
+$stmt = $pdo->prepare("SELECT COUNT(*) FROM risk_assessments WHERE conducted_by = :dpwh_id AND status = 'flagged'");
 $stmt->execute([':dpwh_id' => $dpwhId]);
 $flaggedMine = (int)$stmt->fetchColumn();
 
@@ -47,15 +49,14 @@ $stmtSurveys = $pdo->prepare("
 $stmtSurveys->execute([':district_id' => $districtId]);
 $surveys = $stmtSurveys->fetchAll();
 
-// Recent my surveys
+// Recent my assessments
 $stmtRecent = $pdo->prepare("
-    SELECT sr.result_id, sr.status, sr.created_at, s.survey_name,
+    SELECT ra.assessment_id, ra.status, ra.created_at, ra.assessment_date,
            CONCAT(p.first_name, ' ', p.last_name) AS patient_name
-    FROM survey_results sr
-    JOIN surveys s ON s.survey_id = sr.survey_id
-    JOIN patients p ON p.patient_id = sr.patient_id
-    WHERE sr.conducted_by = :dpwh_id
-    ORDER BY sr.created_at DESC
+    FROM risk_assessments ra
+    JOIN patients p ON p.patient_id = ra.patient_id
+    WHERE ra.conducted_by = :dpwh_id
+    ORDER BY ra.assessment_date DESC
     LIMIT 8
 ");
 $stmtRecent->execute([':dpwh_id' => $dpwhId]);
@@ -82,7 +83,7 @@ require_once __DIR__ . '/../includes/sidebar.php';
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <p class="text-muted mb-1 small text-uppercase fw-semibold">My Surveys</p>
+                            <p class="text-muted mb-1 small text-uppercase fw-semibold">My Assessments</p>
                             <h3 class="mb-0 fw-bold"><?= e((string)$mySurveys) ?></h3>
                         </div>
                         <div class="icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-journal-check"></i></div>
@@ -151,11 +152,11 @@ require_once __DIR__ . '/../includes/sidebar.php';
 
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-0 py-3">
-                    <h5 class="mb-0">Available Surveys</h5>
+                    <h5 class="mb-0">Available Assessments</h5>
                 </div>
                 <div class="card-body">
                     <?php if (!$surveys): ?>
-                        <p class="text-muted mb-0 small">No active surveys available.</p>
+                        <p class="text-muted mb-0 small">No active assessment forms available.</p>
                     <?php else: ?>
                         <ul class="list-group list-group-flush">
                             <?php foreach ($surveys as $s): ?>
@@ -173,9 +174,9 @@ require_once __DIR__ . '/../includes/sidebar.php';
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">My Recent Surveys</h5>
+                    <h5 class="mb-0">My Recent Assessments</h5>
                     <a href="<?= e(url('dpwh/surveys_new.php')) ?>" class="btn btn-primary btn-sm">
-                        <i class="bi bi-plus-circle me-1"></i> New Survey
+                        <i class="bi bi-plus-circle me-1"></i> New Assessment
                     </a>
                 </div>
                 <div class="card-body p-0">
@@ -183,7 +184,6 @@ require_once __DIR__ . '/../includes/sidebar.php';
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Survey</th>
                                     <th>Patient</th>
                                     <th>Status</th>
                                     <th>Date</th>
@@ -191,18 +191,17 @@ require_once __DIR__ . '/../includes/sidebar.php';
                             </thead>
                             <tbody>
                                 <?php if (!$recent): ?>
-                                    <tr><td colspan="4" class="text-center text-muted py-4">No surveys submitted yet.</td></tr>
+                                    <tr><td colspan="3" class="text-center text-muted py-4">No assessments submitted yet.</td></tr>
                                 <?php else: ?>
                                     <?php foreach ($recent as $r): ?>
                                         <tr>
-                                            <td><?= e($r['survey_name']) ?></td>
-                                            <td><?= e($r['patient_name']) ?></td>
+                                            <td class="fw-semibold"><?= e($r['patient_name']) ?></td>
                                             <td>
                                                 <span class="badge bg-<?= $r['status'] === 'pending' ? 'warning' : ($r['status'] === 'reviewed' ? 'success' : 'danger') ?>">
                                                     <?= e(ucfirst($r['status'])) ?>
                                                 </span>
                                             </td>
-                                            <td class="small text-muted"><?= e(format_datetime($r['created_at'])) ?></td>
+                                            <td class="small text-muted"><?= e(format_date($r['assessment_date'])) ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
