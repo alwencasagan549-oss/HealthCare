@@ -16,24 +16,9 @@ require_once __DIR__ . '/../includes/sidebar.php';
 $pdo = Database::getConnection();
 $audit = new AuditLogger($pdo);
 
-// List districts with counts
-$stmt = $pdo->query("
-    SELECT d.district_id, d.district_name, d.district_code, d.address, d.contact_number,
-           d.email, d.status, d.created_at,
-           COUNT(DISTINCT p.patient_id) AS patient_count,
-           COUNT(DISTINCT u.user_id) AS nurse_count,
-           COUNT(DISTINCT dp.user_id) AS dpwh_count
-    FROM districts d
-    LEFT JOIN patients p ON p.district_id = d.district_id AND p.status = 'active'
-    LEFT JOIN users u ON u.district_id = d.district_id AND u.role = 'nurse' AND u.status = 'active'
-    LEFT JOIN users dp ON dp.district_id = d.district_id AND dp.role = 'dpwh' AND dp.status = 'active'
-    GROUP BY d.district_id
-    ORDER BY d.district_name
-");
-$districts = $stmt->fetchAll();
-
 $pageTitle = 'Districts';
 $districtQueryError = null;
+$districts = [];
 
 try {
     // List districts with counts
@@ -53,7 +38,6 @@ try {
     $districts = $stmt->fetchAll();
 } catch (Throwable $e) {
     $districtQueryError = $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine();
-    $districts = [];
     error_log('Districts query error: ' . $districtQueryError);
 }
 ?>
