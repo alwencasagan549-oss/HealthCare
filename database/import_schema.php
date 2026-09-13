@@ -21,10 +21,7 @@ if ($sql === false || trim($sql) === '') {
 
 $pdo = Database::getConnection();
 
-$statements = array_filter(array_map(
-    static fn ($s) => trim($s),
-    preg_split('/;\s*[\r\n]+/', $sql)
-));
+$statements = splitPostgresSql($sql);
 
 if (!$statements) {
     echo "No SQL statements found in schema file.";
@@ -35,6 +32,7 @@ $pdo->beginTransaction();
 
 try {
     foreach ($statements as $index => $statement) {
+        $statement = trim($statement);
         if ($statement === '') {
             continue;
         }
@@ -66,4 +64,54 @@ try {
     http_response_code(500);
     echo "Schema import failed: " . $e->getMessage() . "\n";
     exit;
+}
+
+/**
+ * Split PostgreSQL SQL by top-level statement-ending semicolons,
+ * while preserving $$...$$ dollar-quoted blocks.
+ */
+function splitPostgresSql(string $sql): array
+{
+    $statements = [];
+    $current = '';
+    $length = strlen($sql);
+
+    for ($i = 0; $i < $length; $i++) {
+        $char = $sql[$i];
+
+        if ($char === '$') {
+            $dollarEnd = strpos($sql, '$', $i + 1);
+            if ($dollarEnd === false) {
+                $current .= $char;
+                continue;
+            }
+
+            $tag = substr($sql, $i + 1, $dollarEnd - $i - 1);
+            $endMarker = '$' . $tag . '$';
+            $endPos = strpos($sql, $endMarker, $dollarEnd);
+            if ($endPos === false) {
+                $current .= $char;
+                continue;
+            }
+
+            $current .= substr($sql, $i, $endPos - $i + strlen($endMarker));
+            $i = $endPos + strlen($endMarker) - 1;
+            continue;
+        }
+
+        if ($char === ';') {
+            $statements[] = $current;
+            $current = '';
+            continue;
+        }
+
+        $current .= $char;
+    }
+
+    $last = trim($current);
+    if ($last !== '') {
+        $statements[] = $last;
+    }
+
+    return $statements;
 }
